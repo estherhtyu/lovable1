@@ -1,0 +1,19 @@
+{
+  "years": [2024, 2025, 2026],
+  "makes": {
+    "2024": ["Mazda"],
+    "2025": ["Mazda"],
+    "2026": ["Mazda"]
+  },
+  "models": {
+    "Mazda": ["CX-5", "CX-30", "CX-50", "CX-70", "CX-90", "Mazda3"]
+  },
+  "trims": {
+    "CX-5": ["S", "S Select", "S Preferred", "S Carbon Edition", "S Premium", "S Premium Plus", "S Turbo"],
+    "CX-30": ["Base", "Select", "Preferred", "Carbon Edition", "Premium", "Turbo"],
+    "CX-50": ["S", "S Preferred", "S Premium", "S Premium Plus", "Turbo", "Turbo Premium", "Turbo Premium Plus"],
+    "CX-70": ["Premium", "Premium Plus"],
+    "CX-90": ["Base", "Preferred", "Preferred Plus", "Premium", "Premium Plus", "S Premium", "S Premium Plus"],
+    "Mazda3": ["Base", "Select", "Preferred", "Carbon Edition", "Premium", "Turbo", "Turbo Premium Plus"]
+  }
+}

@@ -1,0 +1,106 @@
+.oce__wrapper {
+  padding: var(--spacing-medium) 0;
+}
+
+.oce__section-title {
+  font: var(--type-headline-2-strong-font);
+  letter-spacing: var(--type-headline-2-strong-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.oce__fulfillment {
+  margin-bottom: var(--spacing-big);
+}
+
+.oce__item {
+  display: flex;
+  gap: var(--spacing-small);
+  padding: var(--spacing-medium);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  background: var(--color-mazda-white);
+}
+
+.oce__item-icon {
+  font-size: 2.4rem;
+  flex-shrink: 0;
+}
+
+.oce__item-details {
+  flex: 1;
+}
+
+.oce__item-method {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-xxsmall);
+}
+
+.oce__item-dealer {
+  font: var(--type-body-1-default-font);
+  color: var(--color-mazda-black);
+  margin: 0;
+}
+
+.oce__item-address {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin: var(--spacing-xxsmall) 0;
+}
+
+.oce__item-eta {
+  font: var(--type-body-2-default-font);
+  color: var(--color-positive-800);
+  margin: var(--spacing-xxsmall) 0;
+}
+
+.oce__item-appointment {
+  font: var(--type-body-1-emphasized-font);
+  color: var(--color-mazda-black);
+  background: var(--color-mazda-light);
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border-radius: var(--shape-border-radius-1);
+  margin: var(--spacing-xsmall) 0;
+  display: inline-block;
+}
+
+.oce__item-note {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-600);
+  font-style: italic;
+  margin: var(--spacing-xsmall) 0 0;
+}
+
+.oce__next-steps {
+  background: var(--color-mazda-light);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+}
+
+.oce__steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.oce__steps-list li {
+  font: var(--type-body-1-default-font);
+  color: var(--color-neutral-800);
+  padding: var(--spacing-xsmall) 0;
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-300);
+  padding-left: var(--spacing-medium);
+  position: relative;
+}
+
+.oce__steps-list li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: var(--color-positive-800);
+  font-weight: bold;
+}
+
+.oce__steps-list li:last-child {
+  border-bottom: none;
+}

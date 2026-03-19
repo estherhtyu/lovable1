@@ -1,0 +1,47 @@
+{
+  "default": {
+    "difficulty": "medium",
+    "diy_time": "45-60 minutes",
+    "dealer_price": "$89.00",
+    "isheets": [
+      { "title": "Installation Guide", "url": "https://example.com/isheets/install-guide.pdf" },
+      { "title": "Parts Diagram", "url": "https://example.com/isheets/parts-diagram.pdf" }
+    ],
+    "qmerit_eligible": false,
+    "notes": "Professional installation recommended for best results"
+  },
+  "easy-install": {
+    "difficulty": "easy",
+    "diy_time": "15-20 minutes",
+    "dealer_price": "$45.00",
+    "isheets": [
+      { "title": "Quick Start Guide", "url": "https://example.com/isheets/quick-start.pdf" }
+    ],
+    "qmerit_eligible": false,
+    "notes": "Simple bolt-on installation, no special tools required"
+  },
+  "hard-install": {
+    "difficulty": "hard",
+    "diy_time": "2-3 hours",
+    "dealer_price": "$189.00",
+    "isheets": [
+      { "title": "Installation Manual", "url": "https://example.com/isheets/install-manual.pdf" },
+      { "title": "Wiring Diagram", "url": "https://example.com/isheets/wiring-diagram.pdf" },
+      { "title": "Safety Precautions", "url": "https://example.com/isheets/safety.pdf" }
+    ],
+    "qmerit_eligible": false,
+    "notes": "Professional installation strongly recommended. Requires specialty tools."
+  },
+  "wall-charger": {
+    "difficulty": "hard",
+    "diy_time": "N/A - Professional installation required",
+    "dealer_price": "$299.00",
+    "isheets": [
+      { "title": "Charger Specifications", "url": "https://example.com/isheets/charger-specs.pdf" },
+      { "title": "Electrical Requirements", "url": "https://example.com/isheets/electrical-req.pdf" }
+    ],
+    "qmerit_eligible": true,
+    "qmerit_url": "https://www.qmerit.com/ev/mazda",
+    "notes": "Licensed electrician required. Schedule through Qmerit for certified installation."
+  }
+}

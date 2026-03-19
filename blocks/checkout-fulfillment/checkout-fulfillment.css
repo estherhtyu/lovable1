@@ -1,0 +1,86 @@
+.checkout-fulfillment__wrapper {
+  padding: var(--spacing-medium) 0;
+}
+
+.checkout-fulfillment__title {
+  font: var(--type-headline-2-strong-font);
+  letter-spacing: var(--type-headline-2-strong-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.checkout-fulfillment__card {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+  background: var(--color-mazda-white);
+}
+
+.checkout-fulfillment__method {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-small);
+  padding-bottom: var(--spacing-small);
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-200);
+}
+
+.checkout-fulfillment__icon {
+  font-size: 2.4rem;
+}
+
+.checkout-fulfillment__method-label {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.checkout-fulfillment__method-desc {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin-top: var(--spacing-xxsmall);
+}
+
+.checkout-fulfillment__section-label {
+  display: block;
+  font: var(--type-details-overline-font);
+  letter-spacing: var(--type-details-overline-letter-spacing);
+  color: var(--color-neutral-600);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-xxsmall);
+}
+
+.checkout-fulfillment__vehicle,
+.checkout-fulfillment__dealer,
+.checkout-fulfillment__schedule {
+  padding: var(--spacing-small) 0;
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-200);
+}
+
+.checkout-fulfillment__vehicle:last-child,
+.checkout-fulfillment__dealer:last-child,
+.checkout-fulfillment__schedule:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.checkout-fulfillment__vehicle-name {
+  font: var(--type-body-1-default-font);
+  color: var(--color-mazda-black);
+}
+
+.checkout-fulfillment__dealer-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-800);
+}
+
+.checkout-fulfillment__dealer-info strong {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.checkout-fulfillment__schedule-time {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}

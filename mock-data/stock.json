@@ -1,0 +1,30 @@
+{
+  "default": {
+    "status": "in_stock",
+    "qty": 25,
+    "ship_eta": "5-7 business days",
+    "pickup_eta": "3-5 business days",
+    "install_eta": "7-14 days"
+  },
+  "low-stock": {
+    "status": "low_stock",
+    "qty": 3,
+    "ship_eta": "5-7 business days",
+    "pickup_eta": "5-7 business days",
+    "install_eta": "10-14 days"
+  },
+  "backorder": {
+    "status": "backorder",
+    "qty": 0,
+    "ship_eta": "3-4 weeks",
+    "pickup_eta": "3-4 weeks",
+    "install_eta": "4-5 weeks"
+  },
+  "out-of-stock": {
+    "status": "out_of_stock",
+    "qty": 0,
+    "ship_eta": null,
+    "pickup_eta": null,
+    "install_eta": null
+  }
+}

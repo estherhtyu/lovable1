@@ -1,0 +1,127 @@
+.dealer-locator__wrapper {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+  background: var(--color-mazda-white);
+}
+
+.dealer-locator__title {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.dealer-locator__search {
+  display: flex;
+  gap: var(--spacing-xsmall);
+  margin-bottom: var(--spacing-medium);
+}
+
+.dealer-locator__input {
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  box-sizing: border-box;
+}
+
+.dealer-locator__search-btn {
+  padding: var(--spacing-xsmall) var(--spacing-medium);
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+  border: none;
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.dealer-locator__search-btn:hover {
+  background: var(--color-mazda-dark);
+}
+
+.dealer-locator__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+}
+
+.dealer-locator__card {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-small);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dealer-locator__card:hover {
+  box-shadow: var(--shape-shadow-3);
+}
+
+.dealer-locator__card--selected {
+  border-color: var(--color-mazda-black);
+  border-width: var(--shape-border-width-3);
+}
+
+.dealer-locator__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.dealer-locator__name {
+  font: var(--type-body-1-emphasized-font);
+  color: var(--color-mazda-black);
+  margin: 0;
+}
+
+.dealer-locator__distance {
+  font: var(--type-body-2-default-font);
+  color: var(--color-mazda-grey);
+}
+
+.dealer-locator__address,
+.dealer-locator__phone,
+.dealer-locator__hours {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin: var(--spacing-xxsmall) 0;
+}
+
+.dealer-locator__services {
+  display: flex;
+  gap: var(--spacing-xxsmall);
+  margin: var(--spacing-xsmall) 0;
+}
+
+.dealer-locator__badge {
+  font: var(--type-details-caption-1-font);
+  letter-spacing: var(--type-details-caption-1-letter-spacing);
+  text-transform: uppercase;
+  background: var(--color-mazda-light);
+  color: var(--color-mazda-dark);
+  padding: 2px var(--spacing-xsmall);
+  border-radius: var(--shape-border-radius-1);
+}
+
+.dealer-locator__select-btn {
+  width: 100%;
+  margin-top: var(--spacing-xsmall);
+  padding: var(--spacing-xsmall);
+  background: var(--color-mazda-white);
+  color: var(--color-mazda-black);
+  border: var(--shape-border-width-1) solid var(--color-mazda-black);
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dealer-locator__select-btn:hover {
+  background: var(--color-mazda-light);
+}
+
+.dealer-locator__card--selected .dealer-locator__select-btn {
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+}

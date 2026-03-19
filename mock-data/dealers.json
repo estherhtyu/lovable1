@@ -1,0 +1,57 @@
+[
+  {
+    "id": "dealer-001",
+    "name": "Metro Mazda",
+    "address": "1234 Main Street, Dallas, TX 75201",
+    "phone": "(214) 555-0100",
+    "distance": "3.2 mi",
+    "hours": "Mon-Sat 9AM-8PM, Sun 11AM-5PM",
+    "services": ["pickup", "installation"],
+    "lat": 32.7767,
+    "lng": -96.7970
+  },
+  {
+    "id": "dealer-002",
+    "name": "Lakewood Mazda",
+    "address": "5678 Elm Avenue, Plano, TX 75024",
+    "phone": "(972) 555-0200",
+    "distance": "8.5 mi",
+    "hours": "Mon-Sat 9AM-7PM, Sun 12PM-5PM",
+    "services": ["pickup", "installation"],
+    "lat": 33.0198,
+    "lng": -96.6989
+  },
+  {
+    "id": "dealer-003",
+    "name": "Riverside Mazda",
+    "address": "910 Commerce Blvd, Fort Worth, TX 76102",
+    "phone": "(817) 555-0300",
+    "distance": "15.1 mi",
+    "hours": "Mon-Fri 8AM-8PM, Sat 9AM-6PM",
+    "services": ["pickup", "installation"],
+    "lat": 32.7555,
+    "lng": -97.3308
+  },
+  {
+    "id": "dealer-004",
+    "name": "Northpark Mazda",
+    "address": "2200 Preston Road, Frisco, TX 75034",
+    "phone": "(469) 555-0400",
+    "distance": "22.3 mi",
+    "hours": "Mon-Sat 9AM-8PM, Sun 11AM-5PM",
+    "services": ["pickup"],
+    "lat": 33.1507,
+    "lng": -96.8236
+  },
+  {
+    "id": "dealer-005",
+    "name": "Heritage Mazda",
+    "address": "4400 Interstate 35, Denton, TX 76207",
+    "phone": "(940) 555-0500",
+    "distance": "35.7 mi",
+    "hours": "Mon-Fri 9AM-7PM, Sat 9AM-5PM",
+    "services": ["pickup", "installation"],
+    "lat": 33.2148,
+    "lng": -97.1331
+  }
+]

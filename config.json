@@ -1,8 +1,10 @@
 {
   "public": {
     "default": {
-      "commerce-core-endpoint": "https://na1-sandbox.api.commerce.adobe.com/UnAjzxfvswaY7sYnaGGinV/graphql",
-      "commerce-endpoint": "https://na1-sandbox.api.commerce.adobe.com/UnAjzxfvswaY7sYnaGGinV/graphql",
+      "commerce-core-endpoint": "https://www.aemshop.net/graphql",
+      "commerce-endpoint": "https://www.aemshop.net/cs-graphql",
+      "commerce-core-endpoint-sandbox-backup": "https://na1-sandbox.api.commerce.adobe.com/UnAjzxfvswaY7sYnaGGinV/graphql",
+      "commerce-endpoint-sandbox-backup": "https://na1-sandbox.api.commerce.adobe.com/UnAjzxfvswaY7sYnaGGinV/graphql",
       "commerce-assets-enabled": false,
       "headers": {
         "all": {
@@ -35,6 +37,26 @@
         "picker": {
            "rootCategory": "YOUR_ROOT_CATEGORY_ID"
          }
+      },
+      "features": {
+        "vehicle-fitment": true,
+        "dealer-locator": true,
+        "fulfillment-options": true,
+        "dealer-scheduling": true,
+        "stock-availability": true,
+        "installation-info": true,
+        "cookie-consent": true,
+        "notify-me": true,
+        "contact-support": true,
+        "custom-returns": true,
+        "order-cancellation": true,
+        "promo-code": true,
+        "checkout-fulfillment-summary": true,
+        "checkout-installation-scheduling": true,
+        "order-confirmation-enhanced": true,
+        "landing-page-hero": true,
+        "landing-page-categories": true,
+        "landing-page-promotions": true
       }
     }
   }

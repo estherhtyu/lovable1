@@ -5,15 +5,68 @@
 
 .hero {
   position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+  padding: var(--spacing-xxlarge) var(--spacing-medium);
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero > div {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
+  max-width: 600px;
+  color: var(--color-mazda-white);
+  font: var(--type-display-1-font);
+  letter-spacing: var(--type-display-1-letter-spacing);
+  margin: 0 0 var(--spacing-small);
+}
+
+.hero h2,
+.hero h3 {
+  color: var(--color-neutral-300);
+  max-width: 500px;
+}
+
+.hero p {
+  color: var(--color-neutral-400);
+  max-width: 500px;
+}
+
+.hero a.button {
+  background-color: var(--color-mazda-white);
+  color: var(--color-mazda-black);
+  border-color: var(--color-mazda-white);
+  font-weight: 500;
+}
+
+.hero a.button:hover {
+  background-color: var(--color-neutral-300);
+}
+
+.hero a.button.secondary {
+  background-color: transparent;
+  color: var(--color-mazda-white);
+  border-color: var(--color-mazda-white);
+}
+
+.hero a.button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .hero picture {
@@ -32,6 +85,7 @@
 
 @media (min-width: 900px) {
   .hero {
-    padding: 40px 32px;
+    padding: var(--spacing-xxlarge) var(--spacing-big);
+    min-height: 600px;
   }
 }

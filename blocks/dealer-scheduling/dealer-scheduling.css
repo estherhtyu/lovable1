@@ -1,0 +1,151 @@
+.dealer-scheduling__wrapper {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+  background: var(--color-mazda-white);
+}
+
+.dealer-scheduling__title {
+  font: var(--type-headline-2-strong-font);
+  letter-spacing: var(--type-headline-2-strong-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-xxsmall);
+}
+
+.dealer-scheduling__subtitle {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-small);
+}
+
+.dealer-scheduling__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-xxsmall);
+  margin-bottom: var(--spacing-small);
+}
+
+.dealer-scheduling__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-xsmall);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-1);
+  background: var(--color-mazda-white);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dealer-scheduling__day:hover:not(:disabled) {
+  border-color: var(--color-mazda-black);
+}
+
+.dealer-scheduling__day--selected {
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+  border-color: var(--color-mazda-black);
+}
+
+.dealer-scheduling__day--selected .dealer-scheduling__day-name,
+.dealer-scheduling__day--selected .dealer-scheduling__day-num,
+.dealer-scheduling__day--selected .dealer-scheduling__day-month,
+.dealer-scheduling__day--selected .dealer-scheduling__day-avail {
+  color: var(--color-mazda-white);
+}
+
+.dealer-scheduling__day--unavailable {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-500);
+  cursor: not-allowed;
+}
+
+.dealer-scheduling__day-name {
+  font: var(--type-details-caption-2-font);
+  color: var(--color-neutral-600);
+  text-transform: uppercase;
+}
+
+.dealer-scheduling__day-num {
+  font: var(--type-body-1-emphasized-font);
+  color: var(--color-mazda-black);
+}
+
+.dealer-scheduling__day-month {
+  font: var(--type-details-caption-2-font);
+  color: var(--color-neutral-600);
+}
+
+.dealer-scheduling__day-avail {
+  font: var(--type-details-caption-2-font);
+  color: var(--color-positive-800);
+  margin-top: var(--spacing-xxsmall);
+}
+
+.dealer-scheduling__day--unavailable .dealer-scheduling__day-avail {
+  color: var(--color-neutral-500);
+}
+
+.dealer-scheduling__slots-title {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-xsmall);
+}
+
+.dealer-scheduling__slot-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xsmall);
+}
+
+.dealer-scheduling__slot {
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-3);
+  background: var(--color-mazda-white);
+  font: var(--type-body-2-default-font);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dealer-scheduling__slot:hover {
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+  border-color: var(--color-mazda-black);
+}
+
+.dealer-scheduling__confirmed {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  padding: var(--spacing-small);
+  background: var(--color-positive-200);
+  border-radius: var(--shape-border-radius-2);
+}
+
+.dealer-scheduling__confirmed-icon {
+  color: var(--color-positive-800);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.dealer-scheduling__confirmed-text {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+  flex: 1;
+}
+
+.dealer-scheduling__change-btn {
+  background: none;
+  border: none;
+  color: var(--color-mazda-grey);
+  font: var(--type-body-2-default-font);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 599px) {
+  .dealer-scheduling__days {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

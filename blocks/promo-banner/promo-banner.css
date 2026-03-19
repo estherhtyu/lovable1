@@ -1,0 +1,80 @@
+.promo-banner__wrapper {
+  display: grid;
+  gap: var(--spacing-small);
+}
+
+.promo-banner__wrapper--multi {
+  grid-template-columns: 1fr;
+}
+
+.promo-banner__item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--shape-border-radius-2);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.promo-banner__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.promo-banner__bg picture,
+.promo-banner__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promo-banner__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--spacing-xbig);
+  color: var(--color-mazda-white);
+  max-width: 500px;
+}
+
+.promo-banner__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.promo-banner__content h2,
+.promo-banner__content h3 {
+  color: var(--color-mazda-white);
+  margin-top: 0;
+}
+
+.promo-banner__content p {
+  color: var(--color-neutral-300);
+  margin-top: var(--spacing-xsmall);
+}
+
+.promo-banner__content a.button {
+  background-color: var(--color-mazda-white);
+  color: var(--color-mazda-black);
+  border-color: var(--color-mazda-white);
+}
+
+.promo-banner__content a.button:hover {
+  background-color: var(--color-neutral-300);
+}
+
+.promo-banner.dark .promo-banner__item {
+  background-color: var(--color-mazda-black);
+}
+
+@media (min-width: 900px) {
+  .promo-banner__wrapper--multi {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promo-banner__item {
+    min-height: 400px;
+  }
+}

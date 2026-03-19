@@ -1,0 +1,63 @@
+.contact-support__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-small);
+}
+
+.contact-support__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-big);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  text-decoration: none;
+  color: var(--color-mazda-black);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.contact-support__card:hover {
+  border-color: var(--color-mazda-black);
+  box-shadow: var(--shape-shadow-3);
+}
+
+.contact-support__icon {
+  font-size: 3.2rem;
+  margin-bottom: var(--spacing-xsmall);
+}
+
+.contact-support__title {
+  font: var(--type-headline-2-strong-font);
+  letter-spacing: var(--type-headline-2-strong-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-xxsmall);
+}
+
+.contact-support__desc {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-small);
+}
+
+.contact-support__label {
+  font: var(--type-body-2-strong-font);
+  color: var(--color-mazda-black);
+  text-decoration: underline;
+}
+
+.contact-support__card:hover .contact-support__label {
+  color: var(--color-mazda-accent);
+}
+
+@media (min-width: 600px) {
+  .contact-support__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .contact-support__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

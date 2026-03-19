@@ -1,0 +1,135 @@
+.vehicle-fitment__wrapper {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+  background: var(--color-mazda-white);
+}
+
+.vehicle-fitment__title {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.vehicle-fitment__tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-300);
+  margin-bottom: var(--spacing-small);
+}
+
+.vehicle-fitment__tab {
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: var(--type-body-1-strong-font);
+  letter-spacing: var(--type-body-1-strong-letter-spacing);
+  color: var(--color-mazda-grey);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.vehicle-fitment__tab--active {
+  color: var(--color-mazda-black);
+  border-bottom-color: var(--color-mazda-black);
+}
+
+.vehicle-fitment__selects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xsmall);
+  margin-bottom: var(--spacing-small);
+}
+
+.vehicle-fitment__select {
+  width: 100%;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  color: var(--color-mazda-black);
+  background: var(--color-mazda-white);
+  appearance: auto;
+}
+
+.vehicle-fitment__select:disabled {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-500);
+}
+
+.vehicle-fitment__vin-input {
+  margin-bottom: var(--spacing-small);
+}
+
+.vehicle-fitment__input {
+  width: 100%;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: 0.1em;
+  box-sizing: border-box;
+}
+
+.vehicle-fitment__confirm {
+  width: 100%;
+  padding: var(--spacing-xsmall) var(--spacing-medium);
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+  border: none;
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  letter-spacing: var(--type-button-2-letter-spacing);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.vehicle-fitment__confirm:hover:not(:disabled) {
+  background: var(--color-mazda-dark);
+}
+
+.vehicle-fitment__confirm:disabled {
+  background: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+.vehicle-fitment__selected {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  padding: var(--spacing-xsmall) 0;
+}
+
+.vehicle-fitment__check {
+  color: var(--color-positive-800);
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.vehicle-fitment__vehicle-name {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+  flex: 1;
+}
+
+.vehicle-fitment__change {
+  background: none;
+  border: none;
+  color: var(--color-mazda-grey);
+  font: var(--type-body-2-default-font);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.vehicle-fitment__change:hover {
+  color: var(--color-mazda-black);
+}
+
+@media (min-width: 900px) {
+  .vehicle-fitment__selects {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

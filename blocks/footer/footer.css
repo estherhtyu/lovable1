@@ -1,7 +1,23 @@
 footer {
-    background-color: var(--color-neutral-100);
+    background-color: var(--color-mazda-dark);
     font: var(--type-body-2-default-font);
     letter-spacing: var(--type-body-2-default-letter-spacing);
+    color: var(--color-neutral-400);
+}
+
+footer a {
+    color: var(--color-neutral-400);
+}
+
+footer a:hover {
+    color: var(--color-mazda-white);
+}
+
+footer h2,
+footer h3,
+footer h4,
+footer h5 {
+    color: var(--color-mazda-white);
 }
 
 footer .footer > div {

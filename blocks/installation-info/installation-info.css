@@ -1,0 +1,130 @@
+.installation-info__wrapper {
+  padding: var(--spacing-medium) 0;
+}
+
+.installation-info__title {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.installation-info__card {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-medium);
+  background: var(--color-mazda-white);
+}
+
+.installation-info__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xsmall) 0;
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-200);
+}
+
+.installation-info__label {
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  color: var(--color-neutral-700);
+}
+
+.installation-info__value {
+  font: var(--type-body-1-default-font);
+  color: var(--color-mazda-black);
+}
+
+.installation-info__difficulty {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+}
+
+.installation-info__meter {
+  display: flex;
+  gap: 3px;
+}
+
+.installation-info__bar {
+  width: 24px;
+  height: 8px;
+  background: var(--color-neutral-300);
+  border-radius: 2px;
+}
+
+.installation-info__bar--active {
+  background: var(--color-mazda-black);
+}
+
+.installation-info__level {
+  font: var(--type-body-2-strong-font);
+  color: var(--color-mazda-black);
+  text-transform: capitalize;
+}
+
+.installation-info__price {
+  font: var(--type-body-1-emphasized-font);
+  color: var(--color-mazda-black);
+}
+
+.installation-info__documents {
+  padding: var(--spacing-small) 0;
+}
+
+.installation-info__isheets {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-xsmall) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+}
+
+.installation-info__isheet-link {
+  color: var(--color-mazda-black);
+  font: var(--type-body-1-default-font);
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxsmall);
+}
+
+.installation-info__isheet-link::before {
+  content: '\1F4C4';
+}
+
+.installation-info__isheet-link:hover {
+  color: var(--color-mazda-accent);
+}
+
+.installation-info__qmerit {
+  padding: var(--spacing-small);
+  background: var(--color-mazda-light);
+  border-radius: var(--shape-border-radius-2);
+  margin-top: var(--spacing-small);
+}
+
+.installation-info__qmerit-link {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+  text-decoration: none;
+}
+
+.installation-info__qmerit-link:hover {
+  text-decoration: underline;
+}
+
+.installation-info__qmerit-note {
+  display: block;
+  font: var(--type-details-caption-2-font);
+  color: var(--color-neutral-600);
+  margin-top: var(--spacing-xxsmall);
+}
+
+.installation-info__notes {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-600);
+  font-style: italic;
+  margin: var(--spacing-small) 0 0;
+}

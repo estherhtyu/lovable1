@@ -1,0 +1,118 @@
+.fulfillment-options__wrapper {
+  padding: var(--spacing-medium) 0;
+}
+
+.fulfillment-options__title {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.fulfillment-options__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xsmall);
+}
+
+.fulfillment-options__card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-small);
+  padding: var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.fulfillment-options__card:hover {
+  border-color: var(--color-neutral-600);
+}
+
+.fulfillment-options__card--selected {
+  border-color: var(--color-mazda-black);
+  border-width: var(--shape-border-width-3);
+  background: var(--color-mazda-light);
+}
+
+.fulfillment-options__radio {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: var(--shape-border-width-2) solid var(--color-neutral-500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.fulfillment-options__card--selected .fulfillment-options__radio {
+  border-color: var(--color-mazda-black);
+}
+
+.fulfillment-options__radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.fulfillment-options__card--selected .fulfillment-options__radio-dot {
+  background: var(--color-mazda-black);
+}
+
+.fulfillment-options__icon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.fulfillment-options__details {
+  flex: 1;
+}
+
+.fulfillment-options__label {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.fulfillment-options__desc {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin-top: var(--spacing-xxsmall);
+}
+
+.fulfillment-options__eta {
+  font: var(--type-details-caption-1-font);
+  letter-spacing: var(--type-details-caption-1-letter-spacing);
+  color: var(--color-positive-800);
+  margin-top: var(--spacing-xxsmall);
+}
+
+.fulfillment-options__message {
+  margin-top: var(--spacing-small);
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  background: var(--color-informational-200);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-2-default-font);
+  color: var(--color-informational-800);
+}
+
+@media (min-width: 900px) {
+  .fulfillment-options__cards {
+    flex-direction: row;
+  }
+
+  .fulfillment-options__card {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .fulfillment-options__icon {
+    font-size: 3.2rem;
+    margin: var(--spacing-xsmall) 0;
+  }
+}

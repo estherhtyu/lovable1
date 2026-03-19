@@ -1,0 +1,151 @@
+.order-cancellation__wrapper {
+  padding: var(--spacing-medium) 0;
+}
+
+.order-cancellation__timer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  margin-bottom: var(--spacing-small);
+}
+
+.order-cancellation__timer-label {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+}
+
+.order-cancellation__timer-value {
+  font: var(--type-body-1-emphasized-font);
+  color: var(--color-warning-800);
+}
+
+.order-cancellation__btn {
+  padding: var(--spacing-xsmall) var(--spacing-medium);
+  background: var(--color-mazda-white);
+  color: var(--color-alert-800);
+  border: var(--shape-border-width-1) solid var(--color-alert-800);
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.order-cancellation__btn:hover:not(:disabled) {
+  background: var(--color-alert-200);
+}
+
+.order-cancellation__btn:disabled {
+  color: var(--color-neutral-500);
+  border-color: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+.order-cancellation__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-cancellation__modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.order-cancellation__modal-content {
+  position: relative;
+  background: var(--color-mazda-white);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-big);
+  max-width: 480px;
+  width: 90%;
+  box-shadow: var(--shape-shadow-1);
+}
+
+.order-cancellation__modal-title {
+  font: var(--type-headline-1-font);
+  color: var(--color-mazda-black);
+  margin: 0 0 var(--spacing-small);
+}
+
+.order-cancellation__modal-text {
+  font: var(--type-body-1-default-font);
+  color: var(--color-neutral-800);
+  margin: 0 0 var(--spacing-small);
+}
+
+.order-cancellation__modal-policy {
+  background: var(--color-mazda-light);
+  padding: var(--spacing-small);
+  border-radius: var(--shape-border-radius-1);
+  margin-bottom: var(--spacing-medium);
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+}
+
+.order-cancellation__modal-policy ul {
+  margin: var(--spacing-xsmall) 0 0;
+  padding-left: var(--spacing-medium);
+}
+
+.order-cancellation__modal-policy li {
+  margin: var(--spacing-xxsmall) 0;
+}
+
+.order-cancellation__modal-actions {
+  display: flex;
+  gap: var(--spacing-xsmall);
+}
+
+.order-cancellation__modal-cancel {
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  background: var(--color-alert-800);
+  color: var(--color-mazda-white);
+  border: none;
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.order-cancellation__modal-cancel:hover {
+  background: var(--color-alert-500);
+}
+
+.order-cancellation__modal-keep {
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  background: var(--color-mazda-white);
+  color: var(--color-mazda-black);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.order-cancellation__modal-keep:hover {
+  background: var(--color-mazda-light);
+}
+
+.order-cancellation__cancelled {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  padding: var(--spacing-small);
+  background: var(--color-positive-200);
+  border-radius: var(--shape-border-radius-2);
+}
+
+.order-cancellation__cancelled-icon {
+  color: var(--color-positive-800);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.order-cancellation__cancelled p {
+  font: var(--type-body-1-default-font);
+  color: var(--color-mazda-black);
+  margin: 0;
+}

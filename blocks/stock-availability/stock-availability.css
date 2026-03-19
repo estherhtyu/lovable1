@@ -1,0 +1,63 @@
+.stock-availability__wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  padding: var(--spacing-xsmall) 0;
+  flex-wrap: wrap;
+}
+
+.stock-availability__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxsmall);
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+}
+
+.stock-availability__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stock-availability__badge--in-stock .stock-availability__dot {
+  background: var(--color-positive-800);
+}
+
+.stock-availability__badge--in-stock .stock-availability__status {
+  color: var(--color-positive-800);
+}
+
+.stock-availability__badge--low-stock .stock-availability__dot {
+  background: var(--color-warning-800);
+}
+
+.stock-availability__badge--low-stock .stock-availability__status {
+  color: var(--color-warning-800);
+}
+
+.stock-availability__badge--backorder .stock-availability__dot {
+  background: var(--color-warning-500);
+}
+
+.stock-availability__badge--backorder .stock-availability__status {
+  color: var(--color-warning-800);
+}
+
+.stock-availability__badge--out-of-stock .stock-availability__dot {
+  background: var(--color-alert-800);
+}
+
+.stock-availability__badge--out-of-stock .stock-availability__status {
+  color: var(--color-alert-800);
+}
+
+.stock-availability__eta {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+}
+
+.stock-availability__qty {
+  font: var(--type-body-2-default-font);
+  color: var(--color-warning-800);
+}
