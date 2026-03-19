@@ -17,18 +17,56 @@ export default async function decorate(block) {
 
   const fragment = document.createRange().createContextualFragment(`
     <div class="dealer-locator__wrapper">
-      <h3 class="dealer-locator__title">Find a Dealer</h3>
-      <div class="dealer-locator__search">
-        <input type="text" class="dealer-locator__input" placeholder="Enter ZIP code" maxlength="5" />
-        <button class="dealer-locator__search-btn">Search</button>
+      <div class="dealer-locator__header">
+        <h3 class="dealer-locator__title">Your Dealer</h3>
+        <button class="dealer-locator__toggle">Change Dealer</button>
       </div>
-      <div class="dealer-locator__results"></div>
+      <div class="dealer-locator__selected-summary" hidden>
+        <span class="dealer-locator__selected-icon">&#10003;</span>
+        <div class="dealer-locator__selected-info">
+          <strong class="dealer-locator__selected-name"></strong>
+          <span class="dealer-locator__selected-address"></span>
+        </div>
+      </div>
+      <div class="dealer-locator__expandable" hidden>
+        <div class="dealer-locator__search">
+          <input type="text" class="dealer-locator__input" placeholder="Enter ZIP code" maxlength="5" />
+          <button class="dealer-locator__search-btn">Search</button>
+        </div>
+        <div class="dealer-locator__results"></div>
+      </div>
     </div>
   `);
 
+  const $wrapper = fragment.querySelector('.dealer-locator__wrapper');
+  const $toggle = fragment.querySelector('.dealer-locator__toggle');
+  const $summary = fragment.querySelector('.dealer-locator__selected-summary');
+  const $selectedName = fragment.querySelector('.dealer-locator__selected-name');
+  const $selectedAddress = fragment.querySelector('.dealer-locator__selected-address');
+  const $expandable = fragment.querySelector('.dealer-locator__expandable');
   const $input = fragment.querySelector('.dealer-locator__input');
   const $searchBtn = fragment.querySelector('.dealer-locator__search-btn');
   const $results = fragment.querySelector('.dealer-locator__results');
+
+  function collapse(dealer) {
+    $summary.hidden = false;
+    $selectedName.textContent = dealer.name;
+    $selectedAddress.textContent = dealer.address;
+    $expandable.hidden = true;
+    $toggle.textContent = 'Change Dealer';
+  }
+
+  function expand() {
+    $expandable.hidden = false;
+    $toggle.textContent = 'Cancel';
+  }
+
+  function selectDealer(dealer, dealers) {
+    sessionStorage.setItem('selected-dealer', JSON.stringify(dealer));
+    document.dispatchEvent(new CustomEvent('dealer:selected', { detail: dealer }));
+    renderDealers(dealers, dealer.id);
+    collapse(dealer);
+  }
 
   function renderDealers(dealers, selectedId) {
     $results.innerHTML = '';
@@ -52,9 +90,7 @@ export default async function decorate(block) {
       `;
 
       card.querySelector('.dealer-locator__select-btn').addEventListener('click', () => {
-        sessionStorage.setItem('selected-dealer', JSON.stringify(dealer));
-        document.dispatchEvent(new CustomEvent('dealer:selected', { detail: dealer }));
-        renderDealers(dealers, dealer.id);
+        selectDealer(dealer, dealers);
       });
 
       $results.append(card);
@@ -68,21 +104,56 @@ export default async function decorate(block) {
     renderDealers(dealers);
   }
 
+  // Toggle expand/collapse
+  $toggle.addEventListener('click', () => {
+    if ($expandable.hidden) {
+      expand();
+    } else {
+      // Cancel — re-collapse with current selection
+      const current = sessionStorage.getItem('selected-dealer');
+      if (current) {
+        collapse(JSON.parse(current));
+      } else {
+        $expandable.hidden = true;
+        $toggle.textContent = 'Change Dealer';
+      }
+    }
+  });
+
   $searchBtn.addEventListener('click', handleSearch);
   $input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleSearch();
   });
 
-  // Restore existing selection
+  // Initialize: load dealers and set default (first dealer = user's preferred dealer)
+  const dealers = await loadDealers();
   const existing = sessionStorage.getItem('selected-dealer');
+
   if (existing) {
+    // Restore previously selected dealer
     try {
-      const selected = JSON.parse(existing);
-      const dealers = await loadDealers();
-      renderDealers(dealers, selected.id);
+      collapse(JSON.parse(existing));
     } catch { /* ignore */ }
+  } else if (dealers.length > 0) {
+    // Default to user's preferred dealer (first in list for POC)
+    const defaultDealer = dealers[0];
+    sessionStorage.setItem('selected-dealer', JSON.stringify(defaultDealer));
+    document.dispatchEvent(new CustomEvent('dealer:selected', { detail: defaultDealer }));
+    collapse(defaultDealer);
   }
 
   block.textContent = '';
   block.append(fragment);
+
+  // Show/hide based on fulfillment selection (Req 5.4, 6.9)
+  const currentFulfillment = sessionStorage.getItem('selected-fulfillment') || 'ship';
+  if (currentFulfillment === 'ship') {
+    block.closest('.section').hidden = true;
+  }
+
+  document.addEventListener('fulfillment:changed', (e) => {
+    const section = block.closest('.section');
+    if (!section) return;
+    section.hidden = e.detail.option === 'ship';
+  });
 }

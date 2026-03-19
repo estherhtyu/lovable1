@@ -34,6 +34,7 @@ import '../../scripts/initializers/wishlist.js';
 
 import { readBlockConfig } from '../../scripts/aem.js';
 import { fetchPlaceholders, rootLink, getProductLink } from '../../scripts/commerce.js';
+import { isFeatureEnabled } from '../../scripts/features.js';
 
 export default async function decorate(block) {
   // Configuration
@@ -51,6 +52,99 @@ export default async function decorate(block) {
   } = readBlockConfig(block);
 
   const placeholders = await fetchPlaceholders();
+
+  // Fulfillment per line item (Req 9.3)
+  const fulfillmentEnabled = await isFeatureEnabled('fulfillment-options');
+  let itemFulfillments = {};
+  try {
+    itemFulfillments = JSON.parse(sessionStorage.getItem('cart-item-fulfillments') || '{}');
+  } catch { /* ignore */ }
+
+  // Dealer locator modal for cart (Req 9.6)
+  let dealerModal = null;
+  let dealerData = null;
+
+  async function loadDealerData() {
+    if (dealerData) return dealerData;
+    const resp = await fetch('/mock-data/dealers.json');
+    dealerData = await resp.json();
+    return dealerData;
+  }
+
+  function openDealerModal() {
+    if (!dealerModal) {
+      dealerModal = document.createElement('div');
+      dealerModal.className = 'cart-dealer-modal';
+      dealerModal.innerHTML = `
+        <div class="cart-dealer-modal__backdrop"></div>
+        <div class="cart-dealer-modal__content">
+          <div class="cart-dealer-modal__header">
+            <h4>Select a Dealer</h4>
+            <button class="cart-dealer-modal__close">&times;</button>
+          </div>
+          <div class="cart-dealer-modal__search">
+            <input type="text" class="cart-dealer-modal__input" placeholder="Enter ZIP code" maxlength="5" />
+            <button class="cart-dealer-modal__search-btn">Search</button>
+          </div>
+          <div class="cart-dealer-modal__results"></div>
+        </div>
+      `;
+
+      dealerModal.querySelector('.cart-dealer-modal__backdrop').addEventListener('click', closeDealerModal);
+      dealerModal.querySelector('.cart-dealer-modal__close').addEventListener('click', closeDealerModal);
+
+      const searchBtn = dealerModal.querySelector('.cart-dealer-modal__search-btn');
+      const searchInput = dealerModal.querySelector('.cart-dealer-modal__input');
+      searchBtn.addEventListener('click', () => searchDealers());
+      searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchDealers(); });
+
+      document.body.append(dealerModal);
+    }
+    dealerModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    // Auto-search with existing dealers
+    searchDealers();
+  }
+
+  function closeDealerModal() {
+    if (dealerModal) {
+      dealerModal.hidden = true;
+      document.body.style.overflow = '';
+    }
+  }
+
+  async function searchDealers() {
+    const dealers = await loadDealerData();
+    const resultsEl = dealerModal.querySelector('.cart-dealer-modal__results');
+    const selectedDealer = JSON.parse(sessionStorage.getItem('selected-dealer') || 'null');
+    resultsEl.innerHTML = '';
+
+    dealers.forEach((d) => {
+      const isSelected = d.id === selectedDealer?.id;
+      const card = document.createElement('div');
+      card.className = `cart-dealer-modal__card${isSelected ? ' cart-dealer-modal__card--selected' : ''}`;
+      card.innerHTML = `
+        <div class="cart-dealer-modal__card-row">
+          <strong>${d.name}</strong>
+          <span>${d.distance}</span>
+        </div>
+        <p>${d.address}</p>
+        <p>${d.phone} &middot; ${d.hours}</p>
+        <button class="cart-dealer-modal__select">${isSelected ? '\u2713 Selected' : 'Select'}</button>
+      `;
+      card.querySelector('.cart-dealer-modal__select').addEventListener('click', () => {
+        sessionStorage.setItem('selected-dealer', JSON.stringify(d));
+        document.dispatchEvent(new CustomEvent('dealer:selected', { detail: d }));
+        // Update all dealer name labels in cart
+        block.querySelectorAll('.cart-line-fulfillment__dealer-name').forEach((el) => {
+          el.textContent = d.name;
+        });
+        closeDealerModal();
+      });
+      resultsEl.append(card);
+    });
+  }
 
   const _cart = Cart.getCartDataFromCache();
 
@@ -201,6 +295,56 @@ export default async function decorate(block) {
         },
 
         Footer: (ctx) => {
+          // Fulfillment Options per line item (Req 9.3)
+          if (fulfillmentEnabled) {
+            const itemId = ctx.item?.uid || ctx.item?.id || ctx.item?.sku;
+            const currentFulfillment = itemFulfillments[itemId]
+              || sessionStorage.getItem('selected-fulfillment') || 'ship';
+            const dealer = JSON.parse(sessionStorage.getItem('selected-dealer') || 'null');
+
+            const fulfillmentRow = document.createElement('div');
+            fulfillmentRow.className = 'cart-line-fulfillment';
+
+            const options = [
+              { id: 'ship', icon: '\u{1F4E6}', label: 'Ship' },
+              { id: 'pickup', icon: '\u{1F3EA}', label: 'Pickup' },
+              { id: 'installation', icon: '\u{1F527}', label: 'Install' },
+            ];
+
+            fulfillmentRow.innerHTML = `
+              <div class="cart-line-fulfillment__options">
+                ${options.map((opt) => `<button class="cart-line-fulfillment__btn${opt.id === currentFulfillment ? ' cart-line-fulfillment__btn--active' : ''}" data-option="${opt.id}">${opt.icon} ${opt.label}</button>`).join('')}
+              </div>
+              <div class="cart-line-fulfillment__dealer" ${(currentFulfillment === 'pickup' || currentFulfillment === 'installation') && dealer ? '' : 'hidden'}>
+                <span class="cart-line-fulfillment__dealer-name">${dealer?.name || ''}</span>
+                <button class="cart-line-fulfillment__change-dealer">Change</button>
+              </div>
+            `;
+
+            fulfillmentRow.querySelectorAll('.cart-line-fulfillment__btn').forEach((btn) => {
+              btn.addEventListener('click', () => {
+                fulfillmentRow.querySelectorAll('.cart-line-fulfillment__btn').forEach((b) => b.classList.remove('cart-line-fulfillment__btn--active'));
+                btn.classList.add('cart-line-fulfillment__btn--active');
+                itemFulfillments[itemId] = btn.dataset.option;
+                sessionStorage.setItem('cart-item-fulfillments', JSON.stringify(itemFulfillments));
+                const currentDealer = JSON.parse(sessionStorage.getItem('selected-dealer') || 'null');
+                const dealerEl = fulfillmentRow.querySelector('.cart-line-fulfillment__dealer');
+                const needsDealer = btn.dataset.option === 'pickup' || btn.dataset.option === 'installation';
+                dealerEl.hidden = !(needsDealer && currentDealer);
+                // If switching to pickup/install and no dealer, open dealer modal
+                if (needsDealer && !currentDealer) openDealerModal();
+              });
+            });
+
+            // Change dealer button opens modal
+            const changeDealerBtn = fulfillmentRow.querySelector('.cart-line-fulfillment__change-dealer');
+            if (changeDealerBtn) {
+              changeDealerBtn.addEventListener('click', () => openDealerModal());
+            }
+
+            ctx.appendChild(fulfillmentRow);
+          }
+
           // Edit Link
           if (ctx.item?.itemType === 'ConfigurableCartItem' && enableUpdatingProduct === 'true') {
             const editLink = document.createElement('div');

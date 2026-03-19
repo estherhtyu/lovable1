@@ -19,6 +19,7 @@ import {
   decorateLinks,
   loadErrorPage,
 } from './commerce.js';
+import { injectPocBlocks } from './poc-blocks.js';
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -132,6 +133,9 @@ async function loadEager(doc) {
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
   await loadSections(main);
+
+  // Inject POC blocks after sections are loaded
+  await injectPocBlocks(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;

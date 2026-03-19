@@ -5,11 +5,74 @@
   background: var(--color-mazda-white);
 }
 
+/* Collapsed header row */
+.dealer-locator__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xsmall);
+}
+
 .dealer-locator__title {
   font: var(--type-headline-1-font);
   letter-spacing: var(--type-headline-1-letter-spacing);
   color: var(--color-mazda-black);
-  margin: 0 0 var(--spacing-small);
+  margin: 0;
+}
+
+.dealer-locator__toggle {
+  background: none;
+  border: none;
+  color: var(--color-mazda-black);
+  font: var(--type-body-2-strong-font);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dealer-locator__toggle:hover {
+  color: var(--color-mazda-grey);
+}
+
+/* Selected dealer summary (collapsed state) */
+.dealer-locator__selected-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  padding: var(--spacing-small);
+  background: var(--color-mazda-light);
+  border-radius: var(--shape-border-radius-2);
+}
+
+.dealer-locator__selected-icon {
+  color: var(--color-positive-800);
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.dealer-locator__selected-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+}
+
+.dealer-locator__selected-name {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.dealer-locator__selected-address {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+}
+
+/* Expandable section (search + results) */
+.dealer-locator__expandable[hidden] {
+  display: none;
+}
+
+.dealer-locator__expandable {
+  margin-top: var(--spacing-small);
 }
 
 .dealer-locator__search {
@@ -45,6 +108,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-small);
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .dealer-locator__card {

@@ -776,15 +776,44 @@ li
   max-height: 15rem;
 }
 
-/* Mazda brand — nav link colors */
-header nav .nav-sections ul > li,
-header nav .nav-sections ul > li > a,
-header nav .nav-sections ul > li a {
-  color: var(--color-mazda-white);
+/* Mazda brand — nav link colors (desktop: white on black header) */
+@media (min-width: 900px) {
+  header nav .nav-sections ul > li,
+  header nav .nav-sections ul > li > a,
+  header nav .nav-sections ul > li a {
+    color: var(--color-mazda-white);
+  }
+
+  header nav .nav-sections ul > li a:hover {
+    color: var(--color-neutral-400);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li:hover,
+  header nav .nav-sections .nav-drop[aria-expanded='true'] {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Submenus open on white background — dark text */
+  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] ul a {
+    color: var(--color-mazda-black);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] ul a:hover {
+    color: var(--color-mazda-grey);
+  }
 }
 
-header nav .nav-sections ul > li a:hover {
-  color: var(--color-neutral-400);
+/* Mobile expanded nav: white background, dark text */
+@media (max-width: 899px) {
+  header nav[aria-expanded='true'] .nav-sections ul > li,
+  header nav[aria-expanded='true'] .nav-sections ul > li > a,
+  header nav[aria-expanded='true'] .nav-sections ul > li a {
+    color: var(--color-mazda-black);
+  }
+
+  header nav[aria-expanded='true'] .nav-sections ul > li a:hover {
+    color: var(--color-mazda-grey);
+  }
 }
 
 header nav .nav-tools button.nav-cart-button,
@@ -796,11 +825,4 @@ header nav .nav-tools button.nav-search-button {
 header nav .nav-tools button.nav-cart-button[data-count]::after {
   background-color: var(--color-mazda-accent);
   color: var(--color-mazda-white);
-}
-
-@media (min-width: 900px) {
-  header nav .nav-sections .default-content-wrapper > ul > li:hover,
-  header nav .nav-sections .nav-drop[aria-expanded='true'] {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
 }

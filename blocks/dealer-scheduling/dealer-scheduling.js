@@ -6,50 +6,93 @@ export default async function decorate(block) {
     return;
   }
 
-  let scheduleData = null;
+  // Only show on checkout when installation fulfillment is selected
+  const fulfillment = sessionStorage.getItem('selected-fulfillment');
+  if (fulfillment !== 'installation') {
+    // Show a note that scheduling is not needed
+    block.textContent = '';
+    const note = document.createElement('div');
+    note.className = 'dealer-scheduling__not-needed';
+    note.innerHTML = '<p>No installation scheduling needed for your current fulfillment selections.</p>';
+    block.append(note);
 
-  async function loadSchedule() {
-    if (scheduleData) return scheduleData;
-    const resp = await fetch('/mock-data/schedule.json');
-    scheduleData = await resp.json();
-    return scheduleData;
+    // Listen for fulfillment changes — if switched to installation, reload
+    document.addEventListener('fulfillment:changed', (e) => {
+      if (e.detail.option === 'installation') {
+        window.location.reload();
+      }
+    });
+    return;
   }
 
   const selectedDealer = JSON.parse(sessionStorage.getItem('selected-dealer') || 'null');
   const dealerName = selectedDealer?.name || 'your dealer';
+  const existingSchedule = sessionStorage.getItem('selected-schedule');
 
+  // Build the trigger button + modal
   const fragment = document.createRange().createContextualFragment(`
     <div class="dealer-scheduling__wrapper">
-      <h4 class="dealer-scheduling__title">Schedule Your Appointment</h4>
-      <p class="dealer-scheduling__subtitle">Select a date and time at <strong class="dealer-scheduling__dealer-name">${dealerName}</strong></p>
-      <div class="dealer-scheduling__calendar">
-        <div class="dealer-scheduling__days"></div>
+      <div class="dealer-scheduling__trigger-section">
+        <h4 class="dealer-scheduling__title">Installation Appointment</h4>
+        <p class="dealer-scheduling__trigger-desc">Schedule your installation at <strong>${dealerName}</strong></p>
+        <div class="dealer-scheduling__trigger-status"></div>
+        <button class="dealer-scheduling__trigger-btn">Schedule Appointment</button>
       </div>
-      <div class="dealer-scheduling__slots" hidden>
-        <h5 class="dealer-scheduling__slots-title"></h5>
-        <div class="dealer-scheduling__slot-grid"></div>
-      </div>
-      <div class="dealer-scheduling__confirmed" hidden>
-        <span class="dealer-scheduling__confirmed-icon">&#10003;</span>
-        <span class="dealer-scheduling__confirmed-text"></span>
-        <button class="dealer-scheduling__change-btn">Change</button>
+
+      <div class="dealer-scheduling__modal" hidden>
+        <div class="dealer-scheduling__modal-backdrop"></div>
+        <div class="dealer-scheduling__modal-content">
+          <div class="dealer-scheduling__modal-header">
+            <h4>Schedule Installation</h4>
+            <button class="dealer-scheduling__modal-close">&times;</button>
+          </div>
+          <p class="dealer-scheduling__subtitle">Select a date and time at <strong class="dealer-scheduling__dealer-name">${dealerName}</strong></p>
+          <div class="dealer-scheduling__calendar">
+            <div class="dealer-scheduling__days"></div>
+          </div>
+          <div class="dealer-scheduling__slots" hidden>
+            <h5 class="dealer-scheduling__slots-title"></h5>
+            <div class="dealer-scheduling__slot-grid"></div>
+          </div>
+        </div>
       </div>
     </div>
   `);
 
+  const $wrapper = fragment.querySelector('.dealer-scheduling__wrapper');
+  const $triggerBtn = fragment.querySelector('.dealer-scheduling__trigger-btn');
+  const $triggerStatus = fragment.querySelector('.dealer-scheduling__trigger-status');
+  const $modal = fragment.querySelector('.dealer-scheduling__modal');
+  const $modalClose = fragment.querySelector('.dealer-scheduling__modal-close');
+  const $backdrop = fragment.querySelector('.dealer-scheduling__modal-backdrop');
   const $days = fragment.querySelector('.dealer-scheduling__days');
   const $slots = fragment.querySelector('.dealer-scheduling__slots');
   const $slotsTitle = fragment.querySelector('.dealer-scheduling__slots-title');
   const $slotGrid = fragment.querySelector('.dealer-scheduling__slot-grid');
-  const $confirmed = fragment.querySelector('.dealer-scheduling__confirmed');
-  const $confirmedText = fragment.querySelector('.dealer-scheduling__confirmed-text');
-  const $changeBtn = fragment.querySelector('.dealer-scheduling__change-btn');
   const $dealerNameEl = fragment.querySelector('.dealer-scheduling__dealer-name');
 
-  const data = await loadSchedule();
+  function openModal() { $modal.hidden = false; document.body.style.overflow = 'hidden'; }
+  function closeModal() { $modal.hidden = true; document.body.style.overflow = ''; }
+
+  function showConfirmed(scheduleInfo) {
+    $triggerStatus.innerHTML = `
+      <div class="dealer-scheduling__confirmed">
+        <span class="dealer-scheduling__confirmed-icon">&#10003;</span>
+        <span class="dealer-scheduling__confirmed-text">${scheduleInfo.dateFormatted} at ${scheduleInfo.time}</span>
+      </div>
+    `;
+    $triggerBtn.textContent = 'Change Appointment';
+  }
+
+  $triggerBtn.addEventListener('click', openModal);
+  $modalClose.addEventListener('click', closeModal);
+  $backdrop.addEventListener('click', closeModal);
+
+  // Load schedule data and build calendar
+  const resp = await fetch('/mock-data/schedule.json');
+  const data = await resp.json();
   const today = new Date();
 
-  // Generate next 14 days
   for (let i = 1; i <= 14; i += 1) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
@@ -88,10 +131,8 @@ export default async function decorate(block) {
             schedulerType: data.schedulerType,
           };
           sessionStorage.setItem('selected-schedule', JSON.stringify(scheduleInfo));
-          $confirmedText.textContent = `${formattedDate} at ${time}`;
-          $confirmed.hidden = false;
-          $slots.hidden = true;
-          $days.parentElement.hidden = true;
+          showConfirmed(scheduleInfo);
+          closeModal();
           document.dispatchEvent(new CustomEvent('schedule:selected', { detail: scheduleInfo }));
         });
         $slotGrid.append(slotBtn);
@@ -102,29 +143,15 @@ export default async function decorate(block) {
     $days.append(dayEl);
   }
 
-  // Change button
-  $changeBtn.addEventListener('click', () => {
-    $confirmed.hidden = true;
-    $days.parentElement.hidden = false;
-    $days.querySelectorAll('.dealer-scheduling__day').forEach((d) => d.classList.remove('dealer-scheduling__day--selected'));
-    $slots.hidden = true;
-    sessionStorage.removeItem('selected-schedule');
-  });
-
   // Listen for dealer changes
   document.addEventListener('dealer:selected', (e) => {
     $dealerNameEl.textContent = e.detail.name;
   });
 
-  // Restore existing
-  const existingSchedule = sessionStorage.getItem('selected-schedule');
+  // Restore existing schedule
   if (existingSchedule) {
     try {
-      const sched = JSON.parse(existingSchedule);
-      $confirmedText.textContent = `${sched.dateFormatted} at ${sched.time}`;
-      $confirmed.hidden = false;
-      $days.parentElement.hidden = true;
-      $slots.hidden = true;
+      showConfirmed(JSON.parse(existingSchedule));
     } catch { /* ignore */ }
   }
 

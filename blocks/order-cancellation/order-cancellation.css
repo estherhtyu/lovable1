@@ -48,6 +48,10 @@
   justify-content: center;
 }
 
+.order-cancellation__modal[hidden] {
+  display: none;
+}
+
 .order-cancellation__modal-backdrop {
   position: absolute;
   inset: 0;

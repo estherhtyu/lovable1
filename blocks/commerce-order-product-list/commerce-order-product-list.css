@@ -8,3 +8,34 @@
 .commerce-order-product-list .dropin-cart-item a:hover {
     text-decoration: none;
 }
+
+/* Fulfillment badge per order line item */
+.oce__line-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxsmall);
+  margin-top: var(--spacing-xsmall);
+  padding: 4px var(--spacing-xsmall);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-details-caption-1-font);
+  letter-spacing: var(--type-details-caption-1-letter-spacing);
+}
+
+.oce__line-badge-icon {
+  font-size: 1.4rem;
+}
+
+.oce__line-badge--ship {
+  background: var(--color-informational-200);
+  color: var(--color-informational-800);
+}
+
+.oce__line-badge--pickup {
+  background: var(--color-positive-200);
+  color: var(--color-positive-800);
+}
+
+.oce__line-badge--installation {
+  background: var(--color-warning-200);
+  color: var(--color-warning-800);
+}

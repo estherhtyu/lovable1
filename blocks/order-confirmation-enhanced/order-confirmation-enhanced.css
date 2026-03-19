@@ -1,3 +1,35 @@
+/* Inline fulfillment badges — injected into each order product line item */
+.oce__line-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xxsmall);
+  margin-top: var(--spacing-xsmall);
+  padding: 4px var(--spacing-xsmall);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-details-caption-1-font);
+  letter-spacing: var(--type-details-caption-1-letter-spacing);
+}
+
+.oce__line-badge-icon {
+  font-size: 1.4rem;
+}
+
+.oce__line-badge--ship {
+  background: var(--color-informational-200);
+  color: var(--color-informational-800);
+}
+
+.oce__line-badge--pickup {
+  background: var(--color-positive-200);
+  color: var(--color-positive-800);
+}
+
+.oce__line-badge--installation {
+  background: var(--color-warning-200);
+  color: var(--color-warning-800);
+}
+
+/* Summary section — dealer + schedule + vehicle (shown once at bottom) */
 .oce__wrapper {
   padding: var(--spacing-medium) 0;
 }
@@ -9,98 +41,69 @@
   margin: 0 0 var(--spacing-small);
 }
 
-.oce__fulfillment {
-  margin-bottom: var(--spacing-big);
-}
-
-.oce__item {
-  display: flex;
-  gap: var(--spacing-small);
-  padding: var(--spacing-medium);
+.oce__summary {
   border: var(--shape-border-width-1) solid var(--color-neutral-300);
   border-radius: var(--shape-border-radius-2);
   background: var(--color-mazda-white);
+  overflow: hidden;
 }
 
-.oce__item-icon {
-  font-size: 2.4rem;
-  flex-shrink: 0;
+.oce__summary-row {
+  display: flex;
+  gap: var(--spacing-medium);
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-200);
 }
 
-.oce__item-details {
-  flex: 1;
+.oce__summary-row:last-child {
+  border-bottom: none;
 }
 
-.oce__item-method {
-  font: var(--type-body-1-strong-font);
-  color: var(--color-mazda-black);
-  margin: 0 0 var(--spacing-xxsmall);
+.oce__summary-label {
+  font: var(--type-details-overline-font);
+  letter-spacing: var(--type-details-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  min-width: 120px;
+  padding-top: 2px;
 }
 
-.oce__item-dealer {
+.oce__summary-value {
   font: var(--type-body-1-default-font);
   color: var(--color-mazda-black);
-  margin: 0;
 }
 
-.oce__item-address {
+.oce__summary-dealer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+}
+
+.oce__summary-dealer strong {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.oce__summary-dealer span {
   font: var(--type-body-2-default-font);
   color: var(--color-neutral-700);
-  margin: var(--spacing-xxsmall) 0;
 }
 
-.oce__item-eta {
-  font: var(--type-body-2-default-font);
-  color: var(--color-positive-800);
-  margin: var(--spacing-xxsmall) 0;
-}
-
-.oce__item-appointment {
+.oce__summary-appointment {
   font: var(--type-body-1-emphasized-font);
   color: var(--color-mazda-black);
   background: var(--color-mazda-light);
-  padding: var(--spacing-xsmall) var(--spacing-small);
+  padding: var(--spacing-xxsmall) var(--spacing-xsmall);
   border-radius: var(--shape-border-radius-1);
-  margin: var(--spacing-xsmall) 0;
-  display: inline-block;
 }
 
-.oce__item-note {
-  font: var(--type-body-2-default-font);
-  color: var(--color-neutral-600);
-  font-style: italic;
-  margin: var(--spacing-xsmall) 0 0;
-}
+@media (max-width: 599px) {
+  .oce__summary-row {
+    flex-direction: column;
+    gap: var(--spacing-xxsmall);
+  }
 
-.oce__next-steps {
-  background: var(--color-mazda-light);
-  border-radius: var(--shape-border-radius-2);
-  padding: var(--spacing-medium);
-}
-
-.oce__steps-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.oce__steps-list li {
-  font: var(--type-body-1-default-font);
-  color: var(--color-neutral-800);
-  padding: var(--spacing-xsmall) 0;
-  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-300);
-  padding-left: var(--spacing-medium);
-  position: relative;
-}
-
-.oce__steps-list li::before {
-  content: '\2713';
-  position: absolute;
-  left: 0;
-  color: var(--color-positive-800);
-  font-weight: bold;
-}
-
-.oce__steps-list li:last-child {
-  border-bottom: none;
+  .oce__summary-label {
+    min-width: unset;
+  }
 }

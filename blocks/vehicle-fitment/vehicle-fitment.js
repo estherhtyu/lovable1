@@ -104,9 +104,10 @@ export default async function decorate(block) {
 
   function resetFrom(level) {
     const levels = ['make', 'model', 'trim'];
+    const selects = { make: $makeSelect, model: $modelSelect, trim: $trimSelect };
     const startIdx = levels.indexOf(level);
     for (let i = startIdx; i < levels.length; i += 1) {
-      const sel = fragment.querySelector(`[data-level="${levels[i]}"]`);
+      const sel = selects[levels[i]];
       sel.innerHTML = `<option value="">${levels[i].charAt(0).toUpperCase() + levels[i].slice(1)}</option>`;
       sel.disabled = true;
     }

@@ -62,6 +62,224 @@
     width: fit-content;
 }
 
+/* Fulfillment options per cart line item (Req 9.3) */
+.cart-line-fulfillment {
+  margin-top: var(--spacing-xsmall);
+  padding-top: var(--spacing-xsmall);
+  border-top: var(--shape-border-width-1) solid var(--color-neutral-200);
+}
+
+.cart-line-fulfillment__options {
+  display: flex;
+  gap: var(--spacing-xxsmall);
+}
+
+.cart-line-fulfillment__btn {
+  flex: 1;
+  padding: var(--spacing-xxsmall) var(--spacing-xsmall);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-1);
+  background: var(--color-mazda-white);
+  font: var(--type-details-caption-1-font);
+  letter-spacing: var(--type-details-caption-1-letter-spacing);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.cart-line-fulfillment__btn:hover {
+  border-color: var(--color-neutral-600);
+}
+
+.cart-line-fulfillment__btn--active {
+  border-color: var(--color-mazda-black);
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+}
+
+.cart-line-fulfillment__dealer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  margin-top: var(--spacing-xxsmall);
+  font: var(--type-details-caption-2-font);
+  color: var(--color-neutral-700);
+}
+
+.cart-line-fulfillment__dealer[hidden] {
+  display: none;
+}
+
+.cart-line-fulfillment__dealer-name {
+  font: var(--type-details-caption-1-font);
+  color: var(--color-mazda-black);
+}
+
+.cart-line-fulfillment__change-dealer {
+  background: none;
+  border: none;
+  font: var(--type-details-caption-2-font);
+  color: var(--color-mazda-black);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Dealer selection modal in cart (Req 9.6) */
+.cart-dealer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-dealer-modal[hidden] {
+  display: none;
+}
+
+.cart-dealer-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.cart-dealer-modal__content {
+  position: relative;
+  background: var(--color-mazda-white);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-big);
+  max-width: 560px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shape-shadow-1);
+}
+
+.cart-dealer-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-small);
+}
+
+.cart-dealer-modal__header h4 {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-mazda-black);
+  margin: 0;
+}
+
+.cart-dealer-modal__close {
+  background: none;
+  border: none;
+  font-size: 2.4rem;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.cart-dealer-modal__close:hover {
+  color: var(--color-mazda-black);
+}
+
+.cart-dealer-modal__search {
+  display: flex;
+  gap: var(--spacing-xsmall);
+  margin-bottom: var(--spacing-medium);
+}
+
+.cart-dealer-modal__input {
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  box-sizing: border-box;
+}
+
+.cart-dealer-modal__search-btn {
+  padding: var(--spacing-xsmall) var(--spacing-medium);
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+  border: none;
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.cart-dealer-modal__search-btn:hover {
+  background: var(--color-mazda-dark);
+}
+
+.cart-dealer-modal__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xsmall);
+}
+
+.cart-dealer-modal__card {
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+  padding: var(--spacing-small);
+}
+
+.cart-dealer-modal__card:hover {
+  box-shadow: var(--shape-shadow-3);
+}
+
+.cart-dealer-modal__card--selected {
+  border-color: var(--color-mazda-black);
+  border-width: var(--shape-border-width-3);
+}
+
+.cart-dealer-modal__card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.cart-dealer-modal__card-row strong {
+  font: var(--type-body-1-strong-font);
+  color: var(--color-mazda-black);
+}
+
+.cart-dealer-modal__card-row span {
+  font: var(--type-body-2-default-font);
+  color: var(--color-mazda-grey);
+}
+
+.cart-dealer-modal__card p {
+  font: var(--type-body-2-default-font);
+  color: var(--color-neutral-700);
+  margin: var(--spacing-xxsmall) 0;
+}
+
+.cart-dealer-modal__select {
+  width: 100%;
+  margin-top: var(--spacing-xsmall);
+  padding: var(--spacing-xsmall);
+  background: var(--color-mazda-white);
+  color: var(--color-mazda-black);
+  border: var(--shape-border-width-1) solid var(--color-mazda-black);
+  border-radius: var(--shape-border-radius-3);
+  font: var(--type-button-2-font);
+  cursor: pointer;
+}
+
+.cart-dealer-modal__select:hover {
+  background: var(--color-mazda-light);
+}
+
+.cart-dealer-modal__card--selected .cart-dealer-modal__select {
+  background: var(--color-mazda-black);
+  color: var(--color-mazda-white);
+}
+
 @media (min-width: 768px) {
   .cart__wrapper {
     flex-direction: row;
