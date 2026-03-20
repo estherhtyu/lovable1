@@ -37,66 +37,110 @@ export function setVehicle(vehicle) {
   events.emit(EVENT_NAME, vehicle);
 }
 
+// ─── Dummy Data (fallback when data-platform-url is not configured) ───────────
+
+const DUMMY = {
+  years: ['2024', '2023', '2022', '2021', '2020', '2019', '2018'],
+  makes: {
+    2024: ['Ford', 'Toyota', 'Honda', 'Chevrolet', 'BMW'],
+    2023: ['Ford', 'Toyota', 'Honda', 'Chevrolet', 'BMW'],
+    2022: ['Ford', 'Toyota', 'Honda', 'Chevrolet', 'Nissan'],
+    2021: ['Ford', 'Toyota', 'Honda', 'Nissan', 'Hyundai'],
+    2020: ['Ford', 'Toyota', 'Honda', 'Dodge', 'Hyundai'],
+    2019: ['Ford', 'Toyota', 'Honda', 'Dodge', 'Jeep'],
+    2018: ['Ford', 'Toyota', 'Honda', 'Jeep', 'Ram'],
+  },
+  models: {
+    Ford: ['F-150', 'Explorer', 'Mustang', 'Escape', 'Edge'],
+    Toyota: ['Camry', 'RAV4', 'Tacoma', 'Highlander', '4Runner'],
+    Honda: ['Civic', 'CR-V', 'Accord', 'Pilot', 'Ridgeline'],
+    Chevrolet: ['Silverado', 'Equinox', 'Traverse', 'Blazer', 'Tahoe'],
+    BMW: ['3 Series', '5 Series', 'X3', 'X5', 'M4'],
+    Nissan: ['Altima', 'Rogue', 'Frontier', 'Pathfinder', 'Murano'],
+    Hyundai: ['Tucson', 'Santa Fe', 'Elantra', 'Sonata', 'Palisade'],
+    Dodge: ['Charger', 'Challenger', 'Durango', 'Ram 1500'],
+    Jeep: ['Wrangler', 'Grand Cherokee', 'Cherokee', 'Gladiator'],
+    Ram: ['1500', '2500', '3500'],
+  },
+  trims: {
+    'F-150': ['XL', 'XLT', 'Lariat', 'King Ranch', 'Platinum', 'Limited', 'Raptor'],
+    Explorer: ['Base', 'XLT', 'Limited', 'Platinum', 'ST'],
+    Mustang: ['EcoBoost', 'GT', 'Mach 1', 'Shelby GT500'],
+    Camry: ['LE', 'SE', 'XSE', 'XLE', 'TRD', 'Hybrid LE'],
+    RAV4: ['LE', 'XLE', 'XLE Premium', 'TRD Off-Road', 'Limited', 'Prime'],
+    Tacoma: ['SR', 'SR5', 'TRD Sport', 'TRD Off-Road', 'Limited', 'TRD Pro'],
+    'Civic': ['LX', 'Sport', 'EX', 'Touring', 'Si', 'Type R'],
+    'CR-V': ['LX', 'EX', 'EX-L', 'Touring', 'Hybrid'],
+    Silverado: ['WT', 'Custom', 'LT', 'RST', 'LTZ', 'High Country'],
+    Wrangler: ['Sport', 'Sport S', 'Sahara', 'Rubicon', '4xe'],
+  },
+  vins: {
+    '1FTFW1ET5DFC10312': { year: '2023', make: 'Ford', model: 'F-150', trim: 'Lariat' },
+    '1HGBH41JXMN109186': { year: '2022', make: 'Honda', model: 'Civic', trim: 'Sport' },
+    '4T1BF1FK5CU512345': { year: '2021', make: 'Toyota', model: 'Camry', trim: 'SE' },
+  },
+};
+
 // ─── API Helpers ──────────────────────────────────────────────────────────────
 
 async function fetchYears() {
   const base = await getConfigValue('data-platform-url');
-  if (!base) return [];
+  if (!base) return DUMMY.years;
   try {
     const res = await fetch(`${base}/vehicles/years`);
-    if (!res.ok) return [];
+    if (!res.ok) return DUMMY.years;
     const data = await res.json();
-    return Array.isArray(data) ? data.map(String) : [];
+    return Array.isArray(data) ? data.map(String) : DUMMY.years;
   } catch {
-    return [];
+    return DUMMY.years;
   }
 }
 
 async function fetchMakes(year) {
   const base = await getConfigValue('data-platform-url');
-  if (!base) return [];
+  if (!base) return DUMMY.makes[year] || Object.values(DUMMY.makes)[0];
   try {
     const res = await fetch(`${base}/vehicles/makes?year=${encodeURIComponent(year)}`);
-    if (!res.ok) return [];
+    if (!res.ok) return DUMMY.makes[year] || [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
   } catch {
-    return [];
+    return DUMMY.makes[year] || [];
   }
 }
 
 async function fetchModels(year, make) {
   const base = await getConfigValue('data-platform-url');
-  if (!base) return [];
+  if (!base) return DUMMY.models[make] || [];
   try {
     const res = await fetch(`${base}/vehicles/models?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
-    if (!res.ok) return [];
+    if (!res.ok) return DUMMY.models[make] || [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
   } catch {
-    return [];
+    return DUMMY.models[make] || [];
   }
 }
 
 async function fetchTrims(year, make, model) {
   const base = await getConfigValue('data-platform-url');
-  if (!base) return [];
+  if (!base) return DUMMY.trims[model] || [];
   try {
     const res = await fetch(`${base}/vehicles/trims?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}`);
-    if (!res.ok) return [];
+    if (!res.ok) return DUMMY.trims[model] || [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
   } catch {
-    return [];
+    return DUMMY.trims[model] || [];
   }
 }
 
 async function fetchVehicleByVin(vin) {
   const base = await getConfigValue('data-platform-url');
-  if (!base) return null;
+  if (!base) return DUMMY.vins[vin.toUpperCase()] || null;
   try {
     const res = await fetch(`${base}/vehicles/vin/${encodeURIComponent(vin)}`);
-    if (!res.ok) return null;
+    if (!res.ok) return DUMMY.vins[vin.toUpperCase()] || null;
     return await res.json();
   } catch {
     return null;
