@@ -67,13 +67,44 @@ async function loadFonts() {
 }
 
 /**
+ * Injects the vehicle-selector block before main on product pages (PDP + PLP).
+ * The block is inserted as a synthetic block so it does not need to be
+ * authored onto every page document.
+ * @param {Element} main The container element
+ */
+function buildVehicleSelectorBlock(main) {
+  const isPdp = main.querySelector('.product-details');
+  const isPlp = main.querySelector('.product-list-page');
+  if (!isPdp && !isPlp) return;
+
+  // Avoid double-injection (e.g. SPA navigation)
+  if (document.querySelector('.vehicle-selector')) return;
+
+  const section = document.createElement('div');
+  section.className = 'section';
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'vehicle-selector-wrapper';
+
+  const block = document.createElement('div');
+  block.className = 'vehicle-selector block';
+  block.dataset.blockName = 'vehicle-selector';
+  block.dataset.blockStatus = 'initialized';
+
+  wrapper.appendChild(block);
+  section.appendChild(wrapper);
+  main.insertBefore(section, main.firstChild);
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
-function buildAutoBlocks() {
+function buildAutoBlocks(main) {
   try {
     // TODO: Auto blocking not supported by crosswalk
     // buildHeroBlock(main);
+    buildVehicleSelectorBlock(main);
   } catch (error) {
     console.error('Auto Blocking failed', error);
   }
