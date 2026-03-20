@@ -18,6 +18,24 @@ import { events } from '@dropins/tools/event-bus.js';
 import { readBlockConfig } from '../../scripts/aem.js';
 import { fetchPlaceholders, getProductLink } from '../../scripts/commerce.js';
 
+const VEHICLE_STORAGE_KEY = 'xcom:vehicle';
+
+function getStoredVehicle() {
+  try {
+    const raw = sessionStorage.getItem(VEHICLE_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function buildVehicleFilter(vehicle) {
+  if (!vehicle) return null;
+  const label = vehicle.label
+    || [vehicle.year, vehicle.make, vehicle.model, vehicle.trim].filter(Boolean).join(' ');
+  return { attribute: 'compatible_vehicles', in: [label] };
+}
+
 // Initializers
 import '../../scripts/initializers/search.js';
 import '../../scripts/initializers/wishlist.js';
@@ -63,33 +81,48 @@ export default async function decorate(block) {
     filter,
   } = Object.fromEntries(urlParams.entries());
 
-  // Request search based on the page type on block load
-  if (config.urlpath) {
-    // If it's a category page...
+  // Build a reusable search runner that injects the current vehicle filter
+  async function runSearch({ phrase, currentPage, sortParam, filterParam }) {
+    const vehicleFilter = buildVehicleFilter(getStoredVehicle());
+    const baseFilter = config.urlpath
+      ? [{ attribute: 'categoryPath', eq: config.urlpath }, ...getFilterFromParams(filterParam)]
+      : getFilterFromParams(filterParam);
+    const combinedFilter = vehicleFilter
+      ? [...baseFilter, vehicleFilter]
+      : baseFilter;
+
     await search({
-      phrase: '', // search all products in the category
-      currentPage: page ? Number(page) : 1,
+      phrase: phrase || '',
+      currentPage: currentPage ? Number(currentPage) : 1,
       pageSize: 8,
-      sort: sort ? getSortFromParams(sort) : [{ attribute: 'position', direction: 'DESC' }],
-      filter: [
-        { attribute: 'categoryPath', eq: config.urlpath }, // Add category filter
-        ...getFilterFromParams(filter),
-      ],
-    }).catch(() => {
-      console.error('Error searching for products');
-    });
-  } else {
-    // If it's a search page...
-    await search({
-      phrase: q || '',
-      currentPage: page ? Number(page) : 1,
-      pageSize: 8,
-      sort: getSortFromParams(sort),
-      filter: getFilterFromParams(filter),
+      sort: sortParam
+        ? getSortFromParams(sortParam)
+        : config.urlpath
+          ? [{ attribute: 'position', direction: 'DESC' }]
+          : getSortFromParams(sortParam),
+      filter: combinedFilter,
     }).catch(() => {
       console.error('Error searching for products');
     });
   }
+
+  // Request search based on the page type on block load
+  await runSearch({
+    phrase: q,
+    currentPage: page,
+    sortParam: sort,
+    filterParam: filter,
+  });
+
+  // Re-search when vehicle selection changes
+  document.addEventListener('vehicle:changed', () => {
+    runSearch({
+      phrase: q,
+      currentPage: 1,
+      sortParam: sort,
+      filterParam: filter,
+    });
+  });
 
   const getAddToCartButton = (product) => {
     if (product.typename === 'ComplexProductView') {

@@ -39,10 +39,6 @@ export function setVehicle(vehicle) {
 
 // ─── API Helpers ──────────────────────────────────────────────────────────────
 
-/**
- * Fetches YMMT years from the data-platform API.
- * @returns {Promise<string[]>}
- */
 async function fetchYears() {
   const base = await getConfigValue('data-platform-url');
   if (!base) return [];
@@ -56,11 +52,6 @@ async function fetchYears() {
   }
 }
 
-/**
- * Fetches makes for a given year.
- * @param {string} year
- * @returns {Promise<string[]>}
- */
 async function fetchMakes(year) {
   const base = await getConfigValue('data-platform-url');
   if (!base) return [];
@@ -74,12 +65,6 @@ async function fetchMakes(year) {
   }
 }
 
-/**
- * Fetches models for a given year + make.
- * @param {string} year
- * @param {string} make
- * @returns {Promise<string[]>}
- */
 async function fetchModels(year, make) {
   const base = await getConfigValue('data-platform-url');
   if (!base) return [];
@@ -93,13 +78,6 @@ async function fetchModels(year, make) {
   }
 }
 
-/**
- * Fetches trims for a given year + make + model.
- * @param {string} year
- * @param {string} make
- * @param {string} model
- * @returns {Promise<string[]>}
- */
 async function fetchTrims(year, make, model) {
   const base = await getConfigValue('data-platform-url');
   if (!base) return [];
@@ -113,11 +91,6 @@ async function fetchTrims(year, make, model) {
   }
 }
 
-/**
- * Looks up a vehicle by VIN using the data-platform API.
- * @param {string} vin
- * @returns {Promise<{ year: string, make: string, model: string, trim: string } | null>}
- */
 async function fetchVehicleByVin(vin) {
   const base = await getConfigValue('data-platform-url');
   if (!base) return null;
@@ -132,14 +105,6 @@ async function fetchVehicleByVin(vin) {
 
 // ─── DOM Helpers ──────────────────────────────────────────────────────────────
 
-/**
- * Creates a labelled <select> element and populates it with options.
- * @param {string} id
- * @param {string} labelText
- * @param {string[]} options
- * @param {string} placeholder
- * @returns {{ wrapper: HTMLElement, select: HTMLSelectElement }}
- */
 function createSelect(id, labelText, options, placeholder) {
   const wrapper = document.createElement('div');
   wrapper.className = 'vehicle-selector__field';
@@ -173,11 +138,6 @@ function createSelect(id, labelText, options, placeholder) {
   return { wrapper, select };
 }
 
-/**
- * Resets a <select> to the placeholder and disables it.
- * @param {HTMLSelectElement} select
- * @param {string} placeholder
- */
 function resetSelect(select, placeholder) {
   while (select.options.length > 1) select.remove(1);
   select.options[0].textContent = placeholder;
@@ -185,11 +145,6 @@ function resetSelect(select, placeholder) {
   select.disabled = true;
 }
 
-/**
- * Populates a <select> with new options after clearing previous ones.
- * @param {HTMLSelectElement} select
- * @param {string[]} options
- */
 function populateSelect(select, options) {
   while (select.options.length > 1) select.remove(1);
   options.forEach((opt) => {
@@ -201,92 +156,62 @@ function populateSelect(select, options) {
   select.disabled = options.length === 0;
 }
 
-// ─── Bar ─────────────────────────────────────────────────────────────────────
+// ─── Summary Bar (collapsed state) ───────────────────────────────────────────
 
-/**
- * Builds the persistent vehicle bar that appears above PDP/PLP content.
- * @param {() => void} onOpenDialog
- * @returns {{ bar: HTMLElement, updateBar: (vehicle: object|null) => void }}
- */
-function buildBar(onOpenDialog) {
-  const bar = document.createElement('div');
-  bar.className = 'vehicle-selector__bar';
-  bar.setAttribute('role', 'complementary');
-  bar.setAttribute('aria-label', 'Selected vehicle');
+function buildSummary({ onEdit, onClear }) {
+  const summary = document.createElement('div');
+  summary.className = 'vehicle-selector__summary';
+  summary.setAttribute('role', 'status');
+  summary.setAttribute('aria-label', 'Selected vehicle');
 
-  const label = document.createElement('span');
-  label.className = 'vehicle-selector__bar-label';
+  const icon = document.createElement('span');
+  icon.className = 'vehicle-selector__summary-icon';
+  icon.setAttribute('aria-hidden', 'true');
 
-  const changeBtn = document.createElement('button');
-  changeBtn.type = 'button';
-  changeBtn.className = 'vehicle-selector__bar-change button button--link';
-  changeBtn.textContent = 'Change Vehicle';
-  changeBtn.setAttribute('aria-haspopup', 'dialog');
-  changeBtn.addEventListener('click', onOpenDialog);
+  const labelEl = document.createElement('span');
+  labelEl.className = 'vehicle-selector__summary-label';
 
-  bar.append(label, changeBtn);
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'vehicle-selector__summary-change';
+  editBtn.textContent = 'Change Vehicle';
+  editBtn.addEventListener('click', onEdit);
 
-  function updateBar(vehicle) {
-    if (vehicle) {
-      const text = vehicle.label
-        || [vehicle.year, vehicle.make, vehicle.model, vehicle.trim].filter(Boolean).join(' ');
-      label.textContent = text;
-      bar.setAttribute('data-vehicle-set', 'true');
-      changeBtn.textContent = 'Change Vehicle';
-    } else {
-      label.textContent = 'No vehicle selected';
-      bar.setAttribute('data-vehicle-set', 'false');
-      changeBtn.textContent = 'Select Your Vehicle';
-    }
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'vehicle-selector__summary-clear';
+  clearBtn.textContent = 'Clear';
+  clearBtn.setAttribute('aria-label', 'Clear selected vehicle');
+  clearBtn.addEventListener('click', onClear);
+
+  summary.append(icon, labelEl, editBtn, clearBtn);
+
+  function update(vehicle) {
+    if (!vehicle) return;
+    const text = vehicle.label
+      || [vehicle.year, vehicle.make, vehicle.model, vehicle.trim].filter(Boolean).join(' ');
+    labelEl.textContent = `Shopping for: ${text}`;
   }
 
-  updateBar(getVehicle());
-
-  return { bar, updateBar };
+  return { summary, update };
 }
 
-// ─── Dialog ───────────────────────────────────────────────────────────────────
+// ─── Inline Form (expanded state) ────────────────────────────────────────────
 
-/**
- * Builds the vehicle selection dialog.
- * @param {{ onSave: (vehicle: object) => void, onClose: () => void }} callbacks
- * @returns {{ dialog: HTMLElement, openDialog: () => void, closeDialog: () => void }}
- */
-function buildDialog({ onSave, onClose }) {
-  // Overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'vehicle-selector__overlay';
-  overlay.setAttribute('aria-hidden', 'true');
+function buildForm({ onConfirm, onSkip }) {
+  const form = document.createElement('div');
+  form.className = 'vehicle-selector__form';
 
-  // Dialog
-  const dialog = document.createElement('div');
-  dialog.className = 'vehicle-selector__dialog';
-  dialog.setAttribute('role', 'dialog');
-  dialog.setAttribute('aria-modal', 'true');
-  dialog.setAttribute('aria-labelledby', 'vehicle-selector-title');
+  // Heading
+  const heading = document.createElement('h2');
+  heading.className = 'vehicle-selector__form-heading';
+  heading.textContent = 'Select Your Vehicle';
 
-  // Header
-  const dialogHeader = document.createElement('div');
-  dialogHeader.className = 'vehicle-selector__dialog-header';
+  const subtext = document.createElement('p');
+  subtext.className = 'vehicle-selector__form-subtext';
+  subtext.textContent = 'Filter the catalog to show only compatible accessories for your vehicle.';
 
-  const title = document.createElement('h2');
-  title.id = 'vehicle-selector-title';
-  title.className = 'vehicle-selector__dialog-title';
-  title.textContent = 'Select Your Vehicle';
-
-  const closeBtn = document.createElement('button');
-  closeBtn.type = 'button';
-  closeBtn.className = 'vehicle-selector__close';
-  closeBtn.setAttribute('aria-label', 'Close vehicle selector');
-
-  const closeIcon = document.createElement('span');
-  closeIcon.className = 'vehicle-selector__close-icon';
-  closeIcon.setAttribute('aria-hidden', 'true');
-  closeBtn.appendChild(closeIcon);
-
-  dialogHeader.append(title, closeBtn);
-
-  // Tab switcher
+  // Tab bar
   const tabList = document.createElement('div');
   tabList.className = 'vehicle-selector__tabs';
   tabList.setAttribute('role', 'tablist');
@@ -296,8 +221,8 @@ function buildDialog({ onSave, onClose }) {
   tabVin.className = 'vehicle-selector__tab vehicle-selector__tab--active';
   tabVin.setAttribute('role', 'tab');
   tabVin.setAttribute('aria-selected', 'true');
-  tabVin.setAttribute('aria-controls', 'vehicle-tab-vin');
-  tabVin.id = 'vehicle-tab-btn-vin';
+  tabVin.setAttribute('aria-controls', 'vs-panel-vin');
+  tabVin.id = 'vs-tab-vin';
   tabVin.textContent = 'Enter VIN';
 
   const tabYmmt = document.createElement('button');
@@ -305,18 +230,18 @@ function buildDialog({ onSave, onClose }) {
   tabYmmt.className = 'vehicle-selector__tab';
   tabYmmt.setAttribute('role', 'tab');
   tabYmmt.setAttribute('aria-selected', 'false');
-  tabYmmt.setAttribute('aria-controls', 'vehicle-tab-ymmt');
-  tabYmmt.id = 'vehicle-tab-btn-ymmt';
+  tabYmmt.setAttribute('aria-controls', 'vs-panel-ymmt');
+  tabYmmt.id = 'vs-tab-ymmt';
   tabYmmt.textContent = 'Year / Make / Model';
 
   tabList.append(tabVin, tabYmmt);
 
-  // ── VIN Panel ────────────────────────────────────────────────────────────
+  // ── VIN panel ────────────────────────────────────────────────────────────
   const vinPanel = document.createElement('div');
-  vinPanel.id = 'vehicle-tab-vin';
+  vinPanel.id = 'vs-panel-vin';
   vinPanel.className = 'vehicle-selector__panel vehicle-selector__panel--active';
   vinPanel.setAttribute('role', 'tabpanel');
-  vinPanel.setAttribute('aria-labelledby', 'vehicle-tab-btn-vin');
+  vinPanel.setAttribute('aria-labelledby', 'vs-tab-vin');
 
   const vinDesc = document.createElement('p');
   vinDesc.className = 'vehicle-selector__panel-desc';
@@ -326,13 +251,13 @@ function buildDialog({ onSave, onClose }) {
   vinFieldWrapper.className = 'vehicle-selector__field';
 
   const vinLabel = document.createElement('label');
-  vinLabel.htmlFor = 'vehicle-vin-input';
+  vinLabel.htmlFor = 'vs-vin-input';
   vinLabel.className = 'vehicle-selector__label';
   vinLabel.textContent = 'VIN';
 
   const vinInput = document.createElement('input');
   vinInput.type = 'text';
-  vinInput.id = 'vehicle-vin-input';
+  vinInput.id = 'vs-vin-input';
   vinInput.name = 'vin';
   vinInput.className = 'vehicle-selector__input';
   vinInput.placeholder = 'e.g. 1HGCM82633A004352';
@@ -348,96 +273,89 @@ function buildDialog({ onSave, onClose }) {
   vinError.setAttribute('aria-live', 'polite');
   vinError.hidden = true;
 
-  const vinInfo = document.createElement('span');
-  vinInfo.className = 'vehicle-selector__vin-result';
-  vinInfo.setAttribute('aria-live', 'polite');
-  vinInfo.hidden = true;
+  const vinResult = document.createElement('span');
+  vinResult.className = 'vehicle-selector__vin-result';
+  vinResult.setAttribute('aria-live', 'polite');
+  vinResult.hidden = true;
 
   vinFieldWrapper.append(vinLabel, vinInput, vinError);
-  vinPanel.append(vinDesc, vinFieldWrapper, vinInfo);
+  vinPanel.append(vinDesc, vinFieldWrapper, vinResult);
 
-  // ── YMMT Panel ───────────────────────────────────────────────────────────
+  // ── YMMT panel ────────────────────────────────────────────────────────────
   const ymmtPanel = document.createElement('div');
-  ymmtPanel.id = 'vehicle-tab-ymmt';
+  ymmtPanel.id = 'vs-panel-ymmt';
   ymmtPanel.className = 'vehicle-selector__panel';
   ymmtPanel.setAttribute('role', 'tabpanel');
-  ymmtPanel.setAttribute('aria-labelledby', 'vehicle-tab-btn-ymmt');
+  ymmtPanel.setAttribute('aria-labelledby', 'vs-tab-ymmt');
 
   const ymmtLoading = document.createElement('span');
   ymmtLoading.className = 'vehicle-selector__loading';
   ymmtLoading.textContent = 'Loading years…';
   ymmtLoading.setAttribute('aria-live', 'polite');
 
-  const yearField = createSelect('vehicle-year', 'Year', [], 'Select Year');
-  const makeField = createSelect('vehicle-make', 'Make', [], 'Select Make');
-  const modelField = createSelect('vehicle-model', 'Model', [], 'Select Model');
-  const trimField = createSelect('vehicle-trim', 'Trim', [], 'Select Trim (optional)');
+  const yearField = createSelect('vs-year', 'Year', [], 'Select Year');
+  const makeField = createSelect('vs-make', 'Make', [], 'Select Make');
+  const modelField = createSelect('vs-model', 'Model', [], 'Select Model');
+  const trimField = createSelect('vs-trim', 'Trim', [], 'Select Trim (optional)');
 
   makeField.select.disabled = true;
   modelField.select.disabled = true;
   trimField.select.disabled = true;
 
-  ymmtPanel.append(
-    ymmtLoading,
-    yearField.wrapper,
-    makeField.wrapper,
-    modelField.wrapper,
-    trimField.wrapper,
-  );
+  const ymmtFields = document.createElement('div');
+  ymmtFields.className = 'vehicle-selector__ymmt-fields';
+  ymmtFields.append(yearField.wrapper, makeField.wrapper, modelField.wrapper, trimField.wrapper);
 
-  // ── Dialog Footer ────────────────────────────────────────────────────────
-  const dialogFooter = document.createElement('div');
-  dialogFooter.className = 'vehicle-selector__dialog-footer';
+  ymmtPanel.append(ymmtLoading, ymmtFields);
 
-  const clearBtn = document.createElement('button');
-  clearBtn.type = 'button';
-  clearBtn.className = 'vehicle-selector__clear button button--secondary';
-  clearBtn.textContent = 'Clear Selection';
+  // ── Actions ───────────────────────────────────────────────────────────────
+  const actions = document.createElement('div');
+  actions.className = 'vehicle-selector__actions';
 
-  const saveBtn = document.createElement('button');
-  saveBtn.type = 'button';
-  saveBtn.className = 'vehicle-selector__save button';
-  saveBtn.textContent = 'Confirm Vehicle';
-  saveBtn.disabled = true;
+  const confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.className = 'vehicle-selector__confirm';
+  confirmBtn.textContent = 'Find Compatible Parts';
+  confirmBtn.disabled = true;
 
-  dialogFooter.append(clearBtn, saveBtn);
+  const skipBtn = document.createElement('button');
+  skipBtn.type = 'button';
+  skipBtn.className = 'vehicle-selector__skip';
+  skipBtn.textContent = 'Skip — browse all products';
+  skipBtn.addEventListener('click', onSkip);
 
-  // ── Assemble Dialog ──────────────────────────────────────────────────────
-  dialog.append(dialogHeader, tabList, vinPanel, ymmtPanel, dialogFooter);
+  actions.append(confirmBtn, skipBtn);
 
-  // ── State ────────────────────────────────────────────────────────────────
+  // ── Assemble ──────────────────────────────────────────────────────────────
+  form.append(heading, subtext, tabList, vinPanel, ymmtPanel, actions);
+
+  // ── State ─────────────────────────────────────────────────────────────────
   let pendingVehicle = null;
   let ymmtLoaded = false;
 
-  function setSaveEnabled(vehicle) {
+  function setPending(vehicle) {
     pendingVehicle = vehicle;
-    saveBtn.disabled = !vehicle;
+    confirmBtn.disabled = !vehicle;
   }
 
-  // ── Tab switching ────────────────────────────────────────────────────────
-  function activateTab(tabName) {
-    const isVin = tabName === 'vin';
-
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  function activateTab(name) {
+    const isVin = name === 'vin';
     tabVin.classList.toggle('vehicle-selector__tab--active', isVin);
-    tabVin.setAttribute('aria-selected', isVin ? 'true' : 'false');
+    tabVin.setAttribute('aria-selected', String(isVin));
     tabYmmt.classList.toggle('vehicle-selector__tab--active', !isVin);
-    tabYmmt.setAttribute('aria-selected', !isVin ? 'true' : 'false');
-
+    tabYmmt.setAttribute('aria-selected', String(!isVin));
     vinPanel.classList.toggle('vehicle-selector__panel--active', isVin);
     ymmtPanel.classList.toggle('vehicle-selector__panel--active', !isVin);
-
-    setSaveEnabled(null);
-
-    if (!isVin && !ymmtLoaded) {
-      loadYmmtYears();
-    }
+    setPending(null);
+    if (!isVin && !ymmtLoaded) loadYears();
   }
 
   tabVin.addEventListener('click', () => activateTab('vin'));
   tabYmmt.addEventListener('click', () => activateTab('ymmt'));
 
-  // ── VIN Logic ────────────────────────────────────────────────────────────
-  let vinLookupTimer = null;
+  // ── VIN logic ─────────────────────────────────────────────────────────────
+  let vinTimer = null;
 
   function validateVin(val) {
     return /^[A-HJ-NPR-Z0-9]{17}$/i.test(val);
@@ -447,33 +365,31 @@ function buildDialog({ onSave, onClose }) {
     const val = vinInput.value.trim().toUpperCase();
     vinInput.value = val;
     vinError.hidden = true;
-    vinInfo.hidden = true;
-    setSaveEnabled(null);
-
-    clearTimeout(vinLookupTimer);
-
-    if (validateVin(val)) {
-      vinLookupTimer = setTimeout(async () => {
-        vinInfo.textContent = 'Looking up vehicle…';
-        vinInfo.hidden = false;
-
-        const vehicle = await fetchVehicleByVin(val);
-        if (vehicle) {
-          const label = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim].filter(Boolean).join(' ');
-          vinInfo.textContent = `Found: ${label}`;
-          setSaveEnabled({ vin: val, ...vehicle, label });
-        } else {
-          vinInfo.textContent = '';
-          vinInfo.hidden = true;
-          vinError.textContent = 'VIN not found. Please check and try again.';
-          vinError.hidden = false;
-        }
-      }, 500);
-    }
+    vinResult.hidden = true;
+    setPending(null);
+    clearTimeout(vinTimer);
+    if (!validateVin(val)) return;
+    vinTimer = setTimeout(async () => {
+      vinResult.textContent = 'Looking up vehicle…';
+      vinResult.hidden = false;
+      const vehicle = await fetchVehicleByVin(val);
+      if (vehicle) {
+        const label = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim]
+          .filter(Boolean).join(' ');
+        vinResult.textContent = `Found: ${label}`;
+        setPending({
+          vin: val, ...vehicle, label,
+        });
+      } else {
+        vinResult.hidden = true;
+        vinError.textContent = 'VIN not found. Please check and try again.';
+        vinError.hidden = false;
+      }
+    }, 500);
   });
 
-  // ── YMMT Logic ───────────────────────────────────────────────────────────
-  async function loadYmmtYears() {
+  // ── YMMT logic ────────────────────────────────────────────────────────────
+  async function loadYears() {
     ymmtLoading.textContent = 'Loading years…';
     ymmtLoading.hidden = false;
     const years = await fetchYears();
@@ -484,12 +400,11 @@ function buildDialog({ onSave, onClose }) {
   }
 
   yearField.select.addEventListener('change', async () => {
-    const year = yearField.select.value;
+    const { value: year } = yearField.select;
     resetSelect(makeField.select, 'Select Make');
     resetSelect(modelField.select, 'Select Model');
     resetSelect(trimField.select, 'Select Trim (optional)');
-    setSaveEnabled(null);
-
+    setPending(null);
     if (!year) return;
     makeField.select.disabled = true;
     const makes = await fetchMakes(year);
@@ -499,11 +414,10 @@ function buildDialog({ onSave, onClose }) {
 
   makeField.select.addEventListener('change', async () => {
     const year = yearField.select.value;
-    const make = makeField.select.value;
+    const { value: make } = makeField.select;
     resetSelect(modelField.select, 'Select Model');
     resetSelect(trimField.select, 'Select Trim (optional)');
-    setSaveEnabled(null);
-
+    setPending(null);
     if (!make) return;
     modelField.select.disabled = true;
     const models = await fetchModels(year, make);
@@ -514,20 +428,13 @@ function buildDialog({ onSave, onClose }) {
   modelField.select.addEventListener('change', async () => {
     const year = yearField.select.value;
     const make = makeField.select.value;
-    const model = modelField.select.value;
+    const { value: model } = modelField.select;
     resetSelect(trimField.select, 'Select Trim (optional)');
-
-    if (!model) {
-      setSaveEnabled(null);
-      return;
-    }
-
-    // Model alone is sufficient to confirm; trim is optional
+    if (!model) { setPending(null); return; }
     const label = [year, make, model].filter(Boolean).join(' ');
-    setSaveEnabled({
+    setPending({
       year, make, model, label,
     });
-
     const trims = await fetchTrims(year, make, model);
     if (trims.length > 0) {
       populateSelect(trimField.select, trims);
@@ -539,100 +446,102 @@ function buildDialog({ onSave, onClose }) {
     const year = yearField.select.value;
     const make = makeField.select.value;
     const model = modelField.select.value;
-    const trim = trimField.select.value;
-
+    const { value: trim } = trimField.select;
     if (model) {
       const label = [year, make, model, trim].filter(Boolean).join(' ');
-      setSaveEnabled({
+      setPending({
         year, make, model, trim: trim || undefined, label,
       });
     }
   });
 
-  // ── Open / Close ─────────────────────────────────────────────────────────
-  function openDialog() {
-    overlay.removeAttribute('aria-hidden');
-    dialog.removeAttribute('aria-hidden');
-    document.body.classList.add('vehicle-selector--open');
-    closeBtn.focus();
+  // ── Confirm ───────────────────────────────────────────────────────────────
+  confirmBtn.addEventListener('click', () => {
+    if (pendingVehicle) onConfirm(pendingVehicle);
+  });
 
-    // Pre-fill from existing vehicle
-    const existing = getVehicle();
-    if (existing?.vin) {
+  // ── Pre-fill from existing vehicle ────────────────────────────────────────
+  function prefill(vehicle) {
+    if (!vehicle) return;
+    if (vehicle.vin) {
       activateTab('vin');
-      vinInput.value = existing.vin;
-      const label = [existing.year, existing.make, existing.model, existing.trim].filter(Boolean).join(' ');
+      vinInput.value = vehicle.vin;
+      const label = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim]
+        .filter(Boolean).join(' ');
       if (label) {
-        vinInfo.textContent = `Current: ${label}`;
-        vinInfo.hidden = false;
+        vinResult.textContent = `Current: ${label}`;
+        vinResult.hidden = false;
       }
-      setSaveEnabled(existing);
-    } else if (existing?.year) {
+      setPending(vehicle);
+    } else if (vehicle.year) {
       activateTab('ymmt');
     }
   }
 
-  function closeDialog() {
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('vehicle-selector--open');
-    onClose();
-  }
-
-  // ── Event Listeners ──────────────────────────────────────────────────────
-  closeBtn.addEventListener('click', closeDialog);
-  overlay.addEventListener('click', closeDialog);
-
-  dialog.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeDialog();
-  });
-
-  clearBtn.addEventListener('click', () => {
-    setVehicle(null);
-    closeDialog();
-  });
-
-  saveBtn.addEventListener('click', () => {
-    if (pendingVehicle) {
-      onSave(pendingVehicle);
-      closeDialog();
-    }
-  });
-
-  return {
-    overlay, dialog, openDialog, closeDialog,
-  };
+  return { form, prefill };
 }
 
 // ─── Block Decorator ──────────────────────────────────────────────────────────
 
 /**
  * Decorates the vehicle-selector block.
- * Renders a persistent vehicle bar + modal dialog for vehicle selection.
+ * Renders an inline panel with VIN/YMMT form (expanded) or a compact summary
+ * bar (collapsed) once a vehicle is confirmed. Dispatches `vehicle:changed`.
  * @param {HTMLElement} block
  */
 export default async function decorate(block) {
   block.textContent = '';
 
-  // Use a deferred ref so buildBar callback can call openDialog after it is defined
-  let openDialogRef;
-  const { bar, updateBar } = buildBar(() => openDialogRef());
-  const {
-    overlay, dialog, openDialog,
-  } = buildDialog({
-    onSave: (vehicle) => {
-      setVehicle(vehicle);
-      updateBar(vehicle);
+  const { summary, update: updateSummary } = buildSummary({
+    onEdit: () => expand(),
+    onClear: () => {
+      setVehicle(null);
+      expand();
     },
-    onClose: () => {},
   });
-  openDialogRef = openDialog;
 
-  block.appendChild(bar);
-  document.body.appendChild(overlay);
-  document.body.appendChild(dialog);
+  const { form, prefill } = buildForm({
+    onConfirm: (vehicle) => {
+      setVehicle(vehicle);
+      updateSummary(vehicle);
+      collapse();
+    },
+    onSkip: () => collapse(),
+  });
 
-  // Keep bar in sync when vehicle changes from elsewhere (e.g. header)
+  function expand() {
+    const existing = getVehicle();
+    prefill(existing);
+    form.hidden = false;
+    summary.hidden = true;
+    block.setAttribute('data-state', 'expanded');
+  }
+
+  function collapse() {
+    form.hidden = true;
+    summary.hidden = false;
+    block.setAttribute('data-state', 'collapsed');
+  }
+
+  block.append(form, summary);
+
+  // Show summary if vehicle already in session; otherwise show form
+  const existing = getVehicle();
+  if (existing) {
+    updateSummary(existing);
+    collapse();
+  } else {
+    summary.hidden = true;
+    block.setAttribute('data-state', 'expanded');
+  }
+
+  // Stay in sync when vehicle is changed elsewhere
   document.addEventListener(EVENT_NAME, (e) => {
-    updateBar(e.detail);
+    if (e.detail) {
+      updateSummary(e.detail);
+      collapse();
+    } else {
+      expand();
+    }
   });
 }
