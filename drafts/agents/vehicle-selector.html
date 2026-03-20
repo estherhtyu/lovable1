@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Selector — Draft Test</title>
+  <meta name="template" content="">
+</head>
+<body>
+  <header></header>
+  <main>
+    <div class="section">
+      <div class="vehicle-selector-wrapper">
+        <div class="vehicle-selector block" data-block-name="vehicle-selector" data-block-status="">
+          <div><div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h1>Vehicle Selector Test Page</h1>
+      <p>Use the vehicle selector above to choose your vehicle.</p>
+      <p>Selected vehicle will appear in the bar and be stored in <code>sessionStorage['xcom:vehicle']</code>.</p>
+      <div id="vehicle-status" style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 4px; font-family: monospace;">
+        No vehicle selected
+      </div>
+    </div>
+  </main>
+  <footer></footer>
+  <script>
+    // Listen for vehicle:changed and display state
+    document.addEventListener('vehicle:changed', (e) => {
+      const el = document.getElementById('vehicle-status');
+      el.textContent = e.detail ? JSON.stringify(e.detail, null, 2) : 'Cleared';
+    });
+  </script>
+</body>
+</html>
