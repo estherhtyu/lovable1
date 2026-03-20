@@ -73,9 +73,8 @@ async function loadFonts() {
  * @param {Element} main The container element
  */
 function buildVehicleSelectorBlock(main) {
-  const isPdp = main.querySelector('.product-details');
   const isPlp = main.querySelector('.product-list-page');
-  if (!isPdp && !isPlp) return;
+  if (!isPlp) return;
 
   // Avoid double-injection (e.g. SPA navigation)
   if (document.querySelector('.vehicle-selector')) return;
